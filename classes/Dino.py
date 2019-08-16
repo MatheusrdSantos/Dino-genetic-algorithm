@@ -12,7 +12,7 @@ class Dino:
         self.canvas = canvas
         self.jump_height = jump_height
         #TODO: change image names
-        img_pil = Image.open("./assets/d.png")
+        img_pil = Image.open("./assets/dino.png")
         self.image = ImageTk.PhotoImage(img_pil)
         self.id = self.canvas.create_image(100, 650, image=self.image, anchor=NW)
         #self.master.bind('<Up>', self.jump_call)
