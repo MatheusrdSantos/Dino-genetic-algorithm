@@ -14,8 +14,8 @@ class Cactus:
         self.image = ImageTk.PhotoImage(img_pil)
         self.id = self.canvas.create_image(700, 650, image=self.image, anchor=NW)
         self.moving_id = None
-        #self.draw()
-        self.getColisionInfo()
+        self.draw()
+        #self.getColisionInfo()
     def draw(self):
         if(self.canvas.coords(self.id)[0]<1):
             self.canvas.move(self.id, 800, 0)
