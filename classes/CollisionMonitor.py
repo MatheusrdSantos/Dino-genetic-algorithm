@@ -29,6 +29,8 @@ class ColisionMonitor:
             return True
     def stop_all(self):
         for element in self.elements:
-            self.canvas.after_cancel(element.moving_id)
+            if(element.moving_id):
+                self.canvas.after_cancel(element.moving_id)
         for obstacle in self.obstacles:
-            self.canvas.after_cancel(obstacle.moving_id)
+            if(obstacle.moving_id):
+                self.canvas.after_cancel(obstacle.moving_id)

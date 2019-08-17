@@ -20,7 +20,7 @@ class Dino:
         self.id = self.canvas.create_image(100, 650, image=self.image, anchor=NW)
         self.master.bind('<Up>', self.jump_call)
         self.master.bind('<Down>', self.down)
-        self.getColisionInfo()
+        #self.getColisionInfo()
     def jump_call(self, event):
         if(not self.moving):
             self.moving = True

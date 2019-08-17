@@ -7,6 +7,7 @@ from PIL import Image, ImageTk
 from classes.CollisionMonitor import ColisionMonitor
 from classes.Dino import Dino
 from classes.Cactus import Cactus
+from classes.FlyingDino import FlyingDino
 from classes.CollisionMonitor import ColisionMonitor
 
 class GameController:
@@ -17,7 +18,7 @@ class GameController:
         self.canvas = Canvas(self.master, width=800, height=800, bg='#eee')
         self.colisionMonitor = ColisionMonitor(self.master, self.canvas)
         self.dinos = []
-        self.cactus = []
+        self.obstacles = []
         self.colisionMonitor = None
     def run(self):
         if(self.mode == "game"):
@@ -27,6 +28,7 @@ class GameController:
     # create game elements
     def prepareGame(self):
         self.dinos.append(Dino(self.master, self.canvas))
-        self.cactus.append(Cactus(self.master, self.canvas))
-        self.colisionMonitor = ColisionMonitor(self.master, self.canvas, self.dinos, self.cactus)
+        self.obstacles.append(Cactus(self.master, self.canvas))
+        self.obstacles.append(FlyingDino(self.master, self.canvas))
+        self.colisionMonitor = ColisionMonitor(self.master, self.canvas, self.dinos, self.obstacles)
         self.colisionMonitor.start()
