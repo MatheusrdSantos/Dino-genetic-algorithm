@@ -4,9 +4,9 @@ Description: this class monitors the game elements. If a collision is detected, 
 """
 
 class ColisionMonitor:
-    def __init__(self, master, canvas, elements = [], blocks = []):
+    def __init__(self, master, canvas, elements = [], obstacles = []):
         self.master = master
         self.canvas = canvas
         # elements that can't crash with blocks
         self.elements = elements
-        self.blocks = blocks
+        self.obstacles = obstacles

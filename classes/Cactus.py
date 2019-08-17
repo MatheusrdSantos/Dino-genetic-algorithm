@@ -12,12 +12,24 @@ class Cactus:
         self.canvas = canvas
         img_pil = Image.open("./assets/obstacle-3x.png")
         self.image = ImageTk.PhotoImage(img_pil)
-        self.id = self.canvas.create_image(800, 650, image=self.image, anchor=NW)
+        self.id = self.canvas.create_image(700, 650, image=self.image, anchor=NW)
         self.moving_id = None
-        self.draw()
+        #self.draw()
+        self.getColisionInfo()
     def draw(self):
         if(self.canvas.coords(self.id)[0]<1):
             self.canvas.move(self.id, 800, 0)
         else:
             self.canvas.move(self.id, -8.7, 0)
         self.moving_id = self.canvas.after(20, self.draw)
+    def getColisionInfo(self):
+        block_coords = self.canvas.bbox(self.id)
+
+        radius_block_x = abs(block_coords[0] - block_coords[2])/2
+        block_center_x = radius_block_x + block_coords[0]
+        radius_block_y = abs(block_coords[1] - block_coords[3])/2
+        block_center_y = radius_block_y + block_coords[1]
+
+        #self.canvas.create_oval(block_coords[0], block_coords[1], block_coords[2], block_coords[3], fill="#fff")
+        return {'radius_x': radius_block_x, 'radius_y': radius_block_y, 'coords': {'x': block_center_x, 'y': block_center_y}}
+
