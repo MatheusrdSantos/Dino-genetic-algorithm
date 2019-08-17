@@ -18,8 +18,8 @@ class FlyingDino:
         if(self.canvas.coords(self.id)[0]<1):
             self.canvas.move(self.id, 900, 0)
         else:
-            self.canvas.move(self.id, -11, 0)
-        self.moving_id = self.canvas.after(15, self.draw)
+            self.canvas.move(self.id, -8.7, 0)
+        self.moving_id = self.canvas.after(20, self.draw)
     def getColisionInfo(self):
         block_coords = self.canvas.bbox(self.id)
 
