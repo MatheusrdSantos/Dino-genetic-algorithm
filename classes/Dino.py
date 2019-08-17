@@ -13,7 +13,7 @@ class Dino:
         self.jump_height = jump_height
         self.moving = False
         self.distance = 0
-        self.jumping_id = None
+        self.moving_id = None
         #TODO: change image names
         img_pil = Image.open("./assets/dino.png")
         self.image = ImageTk.PhotoImage(img_pil)
@@ -29,18 +29,18 @@ class Dino:
         if(self.distance<self.jump_height):
             self.distance+=1
             self.canvas.move(self.id, 0, -1)
-            self.jumping_id = self.canvas.after(3, self.jump, event)
+            self.moving_id = self.canvas.after(3, self.jump, event)
         elif(self.distance>=self.jump_height and self.distance<self.jump_height*2):
             self.distance+=1
             self.canvas.move(self.id, 0, 1)
-            self.jumping_id = self.canvas.after(3, self.jump, event)
+            self.moving_id = self.canvas.after(3, self.jump, event)
         else:
             self.distance = 0
             self.moving = False
 
     def down(self, event):
         if(self.moving):
-            self.master.after_cancel(self.jumping_id)
+            self.master.after_cancel(self.moving_id)
             self.moving = False
             self.distance = 0
             coords = self.canvas.coords(self.id)
