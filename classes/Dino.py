@@ -39,4 +39,9 @@ class Dino:
             self.moving = False
 
     def down(self, event):
-        pass
+        if(self.moving):
+            self.master.after_cancel(self.jumping_id)
+            self.moving = False
+            self.distance = 0
+            coords = self.canvas.coords(self.id)
+            self.canvas.move(self.id, 0, 650-coords[1])
