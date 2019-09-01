@@ -31,7 +31,7 @@ class Dino:
             self.distance+=1
             self.canvas.move(self.id, 0, -1)
             self.moving_id = self.canvas.after(3, self.jump, event)
-        elif(self.distance>=self.jump_height and self.distance<self.jump_height*2):
+        elif(self.distance>=self.jump_height and  self.canvas.coords(self.id)[-1]<650):
             self.distance+=1
             self.canvas.move(self.id, 0, 1)
             self.moving_id = self.canvas.after(3, self.jump, event)
@@ -40,12 +40,13 @@ class Dino:
             self.moving = False
 
     def down(self, event):
+        #print('down')
         if(self.moving):
-            self.master.after_cancel(self.moving_id)
-            self.moving = False
-            self.distance = 0
-            coords = self.canvas.coords(self.id)
-            self.canvas.move(self.id, 0, 650-coords[1])
+            #self.master.after_cancel(self.moving_id)
+            #self.moving = False
+            self.distance = self.jump_height
+            #coords = self.canvas.coords(self.id)
+            #self.canvas.move(self.id, 0, 650-coords[1])
     def getColisionInfo(self):
         # [left, top, right, bottom]
         block_coords = self.canvas.bbox(self.id)

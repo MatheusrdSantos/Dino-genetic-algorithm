@@ -28,7 +28,6 @@ class ObstacleGenerator:
         self.run()
     def decraseObstaclesOnscreen(self):
         self.obstaclesOnScreen-=1
-        print(self.obstaclesOnScreen)
     def spawnObstacle(self):
         avaliable_index = []
         count = 0
