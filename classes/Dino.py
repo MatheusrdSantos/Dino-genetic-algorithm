@@ -18,6 +18,7 @@ class Dino:
         img_pil = Image.open("./assets/dino.png")
         self.image = ImageTk.PhotoImage(img_pil)
         self.id = self.canvas.create_image(100, 650, image=self.image, anchor=NW)
+        self.onScreen = False
         self.master.bind('<Up>', self.jump_call)
         self.master.bind('<Down>', self.down)
         #self.getColisionInfo()

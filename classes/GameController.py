@@ -9,6 +9,7 @@ from classes.Dino import Dino
 from classes.Cactus import Cactus
 from classes.FlyingDino import FlyingDino
 from classes.CollisionMonitor import ColisionMonitor
+from classes.ObstacleGenerator import ObstacleGenerator
 
 class GameController:
     def __init__(self, mode):
@@ -20,6 +21,7 @@ class GameController:
         self.dinos = []
         self.obstacles = []
         self.colisionMonitor = None
+        self.obstacleGenerator = None
     def run(self):
         if(self.mode == "game"):
             self.canvas.pack()
@@ -30,5 +32,6 @@ class GameController:
         self.dinos.append(Dino(self.master, self.canvas))
         self.obstacles.append(Cactus(self.master, self.canvas))
         self.obstacles.append(FlyingDino(self.master, self.canvas))
+        self.obstacleGenerator = ObstacleGenerator(self.obstacles, self.master, self.canvas)
         self.colisionMonitor = ColisionMonitor(self.master, self.canvas, self.dinos, self.obstacles)
         self.colisionMonitor.start()

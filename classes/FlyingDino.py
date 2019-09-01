@@ -6,20 +6,25 @@ The Dino can't colide with obstacles.
 from tkinter import NW
 from PIL import Image, ImageTk
 class FlyingDino:
-    def __init__(self, master, canvas):
+    def __init__(self, master, canvas, onScreenOut = lambda x=None: x):
         self.canvas = canvas
         self.master = master
         img_pil = Image.open("./assets/flying-dino.png")
         self.image = ImageTk.PhotoImage(img_pil)
         self.id = canvas.create_image(900, 550, image=self.image, anchor=NW)
         self.moving_id = None
+        self.onScreen = False
+        self.onScreenOut = onScreenOut
         self.draw()
     def draw(self):
         if(self.canvas.coords(self.id)[0]<1):
             self.canvas.move(self.id, 900, 0)
+            self.onScreen = False
+            self.onScreenOut()
         else:
+            self.onScreen = True
             self.canvas.move(self.id, -8.7, 0)
-        self.moving_id = self.canvas.after(20, self.draw)
+            self.moving_id = self.canvas.after(20, self.draw)
     def getColisionInfo(self):
         block_coords = self.canvas.bbox(self.id)
 
