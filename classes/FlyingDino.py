@@ -15,7 +15,7 @@ class FlyingDino:
         self.moving_id = None
         self.onScreen = False
         self.onScreenOut = onScreenOut
-        self.draw()
+        #self.draw()
     def draw(self):
         if(self.canvas.coords(self.id)[0]<1):
             self.canvas.move(self.id, 900, 0)

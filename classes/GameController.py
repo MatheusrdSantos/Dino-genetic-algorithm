@@ -30,8 +30,9 @@ class GameController:
     # create game elements
     def prepareGame(self):
         self.dinos.append(Dino(self.master, self.canvas))
-        self.obstacles.append(Cactus(self.master, self.canvas))
-        self.obstacles.append(FlyingDino(self.master, self.canvas))
-        self.obstacleGenerator = ObstacleGenerator(self.obstacles, self.master, self.canvas)
-        self.colisionMonitor = ColisionMonitor(self.master, self.canvas, self.dinos, self.obstacles)
+        """ self.obstacles.append(Cactus(self.master, self.canvas))
+        self.obstacles.append(FlyingDino(self.master, self.canvas)) """
+        self.obstacleGenerator = ObstacleGenerator(self.master, self.canvas)
+        self.obstacleGenerator.run()
+        self.colisionMonitor = ColisionMonitor(self.master, self.canvas, self.dinos, self.obstacleGenerator.obstacles)
         self.colisionMonitor.start()

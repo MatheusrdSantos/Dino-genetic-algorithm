@@ -16,7 +16,7 @@ class Cactus:
         self.moving_id = None
         self.onScreenOut = onScreenOut
         self.onScreen = False
-        self.draw()
+        #self.draw()
         #self.getColisionInfo()
     def draw(self):
         if(self.canvas.coords(self.id)[0]<1):
