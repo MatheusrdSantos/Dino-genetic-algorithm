@@ -64,3 +64,8 @@ class Dino:
 
         #self.canvas.create_oval(block_coords[0], block_coords[1], block_coords[2], block_coords[3], fill="#fff")
         return {'radius_x': radius_block_x, 'radius_y': radius_block_y, 'coords': {'x': block_center_x, 'y': block_center_y}}
+    def reset(self):
+        self.moving = 0
+        self.distance = 0
+        coords = self.canvas.coords(self.id)
+        self.canvas.move(self.id, 0, 650-coords[1])

@@ -40,3 +40,9 @@ class ObstacleGenerator:
         self.lastOnScreenIndex = obstacle_index
         self.skipDistance = random.randint(250, 400)
         self.obstacles[obstacle_index].draw()
+    def reset(self):
+        for obstacle in self.obstacles:
+            obstacle.reset()
+        self.obstaclesOnScreen = 0
+        self.lastOnScreenIndex = 0
+        self.skipDistance = 0

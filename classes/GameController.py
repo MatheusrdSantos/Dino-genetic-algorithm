@@ -22,6 +22,7 @@ class GameController:
         self.obstacles = []
         self.colisionMonitor = None
         self.obstacleGenerator = None
+        self.master.bind('<r>', self.restart)
     def run(self):
         if(self.mode == "game"):
             self.canvas.pack()
@@ -36,3 +37,8 @@ class GameController:
         self.obstacleGenerator.run()
         self.colisionMonitor = ColisionMonitor(self.master, self.canvas, self.dinos, self.obstacleGenerator.obstacles)
         self.colisionMonitor.start()
+    def restart(self, event):
+        for dino in self.dinos:
+            dino.reset()
+        self.obstacleGenerator.reset()
+        self.obstacleGenerator.run()
