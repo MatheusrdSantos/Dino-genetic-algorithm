@@ -18,5 +18,5 @@ def printImage(image_vector, dimensions=[28,28], bg=False):
 
 printImage(pix_val, [48, 50])
 
-def reduceImageTo(image, originalDimension=[48, 50], finalDimension=[10, 10]):
+def reduceImageTo(image, originalDimension=[48, 50], newRation):
     pass
