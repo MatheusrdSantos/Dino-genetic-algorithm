@@ -35,18 +35,15 @@ def reduceImageTo(image_list, originalDimension, reduceRatio):
         for j in range(0, reduceRatio):
             if(new_image[i] == 1):
                 break
-            original_pixel_pos = (i*reduceRatio)+j + ((line_count)*originalDimension[0])
-            if(image_list[original_pixel_pos][3] == 255):
-                new_image[i] = 1
-                break
             # searchs in depht a black pixel 
-            for k in range(1, reduceRatio):
-                original_pixel_pos_depht = (originalDimension[0]*k)+original_pixel_pos
-                if(image_list[original_pixel_pos_depht][3] == 255):
+            for k in range(0, reduceRatio):
+                original_pixel_pos = (line_count*originalDimension[0]*(reduceRatio-1))+(i*reduceRatio)+j + ((k)*originalDimension[0])
+                #print(original_pixel_pos)
+                if(image_list[original_pixel_pos][3] == 255):
                     new_image[i] = 1
-                break
+                    break
     return new_image
-resized_image = reduceImageTo(pix_val, [48, 50], 2)
+resized_image = reduceImageTo(pix_val, [48, 50], 6)
 print(len(resized_image))
 
 def printBinaryImage(image_vector, dimensions=[28,28], bg=False):
@@ -60,4 +57,4 @@ def printBinaryImage(image_vector, dimensions=[28,28], bg=False):
         else:
             print(color(' ', fore=back, back=back), end="")
 
-printBinaryImage(resized_image, [28, 10])
+printBinaryImage(resized_image, [8, 10])
