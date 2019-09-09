@@ -16,7 +16,7 @@ def printImage(image_vector, dimensions=[28,28], bg=False):
         else:
             print(color(' ', fore=back, back=back), end="")
 
-printImage(pix_val, [48, 50])
+#printImage(pix_val, [48, 50])
 
 def reduceImageTo(image_list, originalDimension, reduceRatio):
     new_height = int(originalDimension[1]/reduceRatio)
@@ -43,7 +43,7 @@ def reduceImageTo(image_list, originalDimension, reduceRatio):
                     new_image[i] = 1
                     break
     return new_image
-resized_image = reduceImageTo(pix_val, [48, 50], 6)
+resized_image = reduceImageTo(pix_val, [48, 50], 1)
 print(len(resized_image))
 
 def printBinaryImage(image_vector, dimensions=[28,28], bg=False):
@@ -57,4 +57,22 @@ def printBinaryImage(image_vector, dimensions=[28,28], bg=False):
         else:
             print(color(' ', fore=back, back=back), end="")
 
-printBinaryImage(resized_image, [8, 10])
+printBinaryImage(resized_image, [48, 10])
+
+def getBorder(image_vector, dimensions):
+    new_image_vector = [0 for pixel in image_vector]
+    # dimensions[0] = x (width) --> i
+    # dimensions[1] = y (height) --> j
+    for j in range(0, dimensions[1]):
+
+        for i in range(0, dimensions[0]):
+
+            original_index = (j*dimensions[0]) + i
+            # check wether tha pixel is in the image
+            # border or not
+            if(j == 0 or i==0 or j==dimensions[1]-1 or i==dimensions[0]-1):
+                if(image_vector[original_index] == 1):
+                    new_image_vector[original_index] = 1
+    return new_image_vector
+print("---------")
+printBinaryImage(getBorder(resized_image, [48, 50]), [48, 50])
