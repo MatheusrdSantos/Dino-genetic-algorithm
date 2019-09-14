@@ -24,7 +24,7 @@ def reduceImageTo(image_path, reduceRatio):
     new_height = int(originalDimension[1]/reduceRatio)
     new_width = int(originalDimension[0]/reduceRatio)
 
-    new_image = [0 for x in range(0, new_height*new_width)]
+    new_image = [0 for x in range(new_height*new_width)]
 
     line_count = 0
     # iterates over the entire new image
@@ -33,7 +33,7 @@ def reduceImageTo(image_path, reduceRatio):
         # the pixel at i position on new_image
         if(i>0 and (i%new_width)==0):
             line_count+=1
-        for j in range(0, reduceRatio):
+        for j in range(reduceRatio):
             if(new_image[i] == 1):
                 break
             # searchs in depht a black pixel 
@@ -60,9 +60,9 @@ def getBorder(image_vector, dimensions):
     new_image_vector = [0 for pixel in image_vector]
     # dimensions[0] = x (width) --> i
     # dimensions[1] = y (height) --> j
-    for j in range(0, dimensions[1]):
+    for j in range(dimensions[1]):
 
-        for i in range(0, dimensions[0]):
+        for i in range(dimensions[0]):
 
             original_index = (j*dimensions[0]) + i
             # check wether tha pixel is in the image
@@ -96,16 +96,27 @@ def getBorderCoords(image_vector, dimensions):
     border_mask = []
     # dimensions[0] = x (width) --> i
     # dimensions[1] = y (height) --> j
-    pixel_order = 0
-    for j in range(0, dimensions[1]):
+    for j in range(dimensions[1]):
 
-        for i in range(0, dimensions[0]):
+        for i in range(dimensions[0]):
 
             original_index = (j*dimensions[0]) + i
             if(image_vector[original_index] == 1):
-                border_mask.append({'x': i, 'y': j, 'order': pixel_order})
-                pixel_order+=1
+                border_mask.append({'x': i, 'y': j})
     return border_mask
+
+def orderByX(image_vector):
+    '''
+    TODO: sort by Y axis as second condition
+    '''
+    smallest = 0
+    for i in range(len(image_vector)-1):
+        for j in range(len(image_vector)-1):
+            if(image_vector[j]['x']>image_vector[j+1]['x']):
+                image_vector[j], image_vector[j+1] = image_vector[j+1], image_vector[j]
+    return image_vector 
+
+        
 
 """ dino = reduceImageTo("./assets/dino.png", 1)
 flying_dino = reduceImageTo("./assets/flying-dino.png", 1)
@@ -134,4 +145,5 @@ printBinaryImage(border_obstacle_3['image'], border_obstacle_3['dimensions']) ""
 dino = reduceImageTo("./assets/dino.png", 1)
 border_dino = getBorder(dino['image'], dino['dimensions'])
 border_coords = getBorderCoords(border_dino['image'], border_dino['dimensions'])
+border_coords = orderByX(border_coords) 
 print(border_coords)
