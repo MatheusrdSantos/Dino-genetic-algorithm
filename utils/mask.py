@@ -96,13 +96,15 @@ def getBorderCoords(image_vector, dimensions):
     border_mask = []
     # dimensions[0] = x (width) --> i
     # dimensions[1] = y (height) --> j
+    pixel_order = 0
     for j in range(0, dimensions[1]):
 
         for i in range(0, dimensions[0]):
 
             original_index = (j*dimensions[0]) + i
             if(image_vector[original_index] == 1):
-                border_mask.append({'x': i, 'y': j})
+                border_mask.append({'x': i, 'y': j, 'order': pixel_order})
+                pixel_order+=1
     return border_mask
 
 """ dino = reduceImageTo("./assets/dino.png", 1)
@@ -129,6 +131,7 @@ printBinaryImage(border_obstacle_1['image'], border_obstacle_1['dimensions'])
 printBinaryImage(border_obstacle_2['image'], border_obstacle_2['dimensions'])
 printBinaryImage(border_obstacle_3['image'], border_obstacle_3['dimensions']) """
 
-""" dino = reduceImageTo("./assets/dino.png", 1)
+dino = reduceImageTo("./assets/dino.png", 1)
 border_dino = getBorder(dino['image'], dino['dimensions'])
-print(len(getBorderCoords(border_dino['image'], border_dino['dimensions']))) """
+border_coords = getBorderCoords(border_dino['image'], border_dino['dimensions'])
+print(border_coords)
