@@ -106,20 +106,20 @@ def getBorderCoords(image_vector, dimensions):
     return border_mask
 
 def sortAxis(image_vector):
-    img_size = len(image_vector)
+    img_length = len(image_vector)
     # sort by X axis
     smallest = 0
-    for i in range(img_size-1):
-        for j in range(img_size-1):
+    for i in range(img_length-1):
+        for j in range(img_length-1):
             if(image_vector[j]['x']>image_vector[j+1]['x']):
                 image_vector[j], image_vector[j+1] = image_vector[j+1], image_vector[j]
 
     # sort by Y axis
     init = 0
-    while init<img_size-1:
+    while init<img_length-1:
         curr_pixel = image_vector[init]
         end = init
-        while (image_vector[end]['x'] == curr_pixel['x']) and end<img_size-1:
+        while (image_vector[end]['x'] == curr_pixel['x']) and end<img_length-1:
             end+=1
         for i in range(init, end):
             for j in range(init, end-1):
@@ -128,6 +128,34 @@ def sortAxis(image_vector):
         init = end
     return image_vector
 
+def hasPixel(image_vector, pixel):
+    image_length = len(image_vector)
+    init = 0
+    end = image_length
+    count = 0
+    while True:
+        count+=1
+        i = int((end-init)/2) + init
+        if(image_vector[i]['x'] == pixel['x']):
+            back_count = 0
+            while image_vector[i-back_count]['x'] == pixel['x']:
+                back_count+=1
+            back_count-=1
+            while image_vector[i-back_count]['x'] == pixel['x']:
+                print(image_vector[i-back_count], "- ", pixel)
+                if(image_vector[i-back_count]['y'] == pixel['y']):
+                    print(count)
+                    return True
+                i+=1
+            print(count)
+            return False
+        elif(image_vector[i]['x'] > pixel['x']):
+            end = i
+        else:
+            init = i + 1
+        if (end-init)<0:
+            print(count)
+            return False
 
         
 
@@ -160,3 +188,4 @@ border_dino = getBorder(dino['image'], dino['dimensions'])
 border_coords = getBorderCoords(border_dino['image'], border_dino['dimensions'])
 border_coords = sortAxis(border_coords) 
 print(border_coords)
+print(hasPixel(border_coords, {'x': 21, 'y': 11}))
