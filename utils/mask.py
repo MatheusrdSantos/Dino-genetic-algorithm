@@ -105,16 +105,29 @@ def getBorderCoords(image_vector, dimensions):
                 border_mask.append({'x': i, 'y': j})
     return border_mask
 
-def orderByX(image_vector):
-    '''
-    TODO: sort by Y axis as second condition
-    '''
+def sortAxis(image_vector):
+    img_size = len(image_vector)
+    # sort by X axis
     smallest = 0
-    for i in range(len(image_vector)-1):
-        for j in range(len(image_vector)-1):
+    for i in range(img_size-1):
+        for j in range(img_size-1):
             if(image_vector[j]['x']>image_vector[j+1]['x']):
                 image_vector[j], image_vector[j+1] = image_vector[j+1], image_vector[j]
-    return image_vector 
+
+    # sort by Y axis
+    init = 0
+    while init<img_size-1:
+        curr_pixel = image_vector[init]
+        end = init
+        while (image_vector[end]['x'] == curr_pixel['x']) and end<img_size-1:
+            end+=1
+        for i in range(init, end):
+            for j in range(init, end-1):
+                if(image_vector[j]['y']>image_vector[j+1]['y']):
+                    image_vector[j], image_vector[j+1] = image_vector[j+1], image_vector[j]
+        init = end
+    return image_vector
+
 
         
 
@@ -145,5 +158,5 @@ printBinaryImage(border_obstacle_3['image'], border_obstacle_3['dimensions']) ""
 dino = reduceImageTo("./assets/dino.png", 1)
 border_dino = getBorder(dino['image'], dino['dimensions'])
 border_coords = getBorderCoords(border_dino['image'], border_dino['dimensions'])
-border_coords = orderByX(border_coords) 
+border_coords = sortAxis(border_coords) 
 print(border_coords)
