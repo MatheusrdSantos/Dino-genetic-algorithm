@@ -1,8 +1,8 @@
 import pickle
-# some_file.py
-import sys
-# insert at 1, 0 is the script path (or '' in REPL)
-sys.path.insert(1, '/home/matheus/python-projects/dino-genetic-algorithm/')
+import sys, os
+
+# chage this path to work in any computer directory
+sys.path.insert(1, os.path.dirname(os.path.dirname(os.path.dirname(os.path.realpath(__file__)))))
 from utils.mask import reduceImageTo, getBorder, getBorderCoords, sortAxis
 
 dino = reduceImageTo("./assets/dino.png", 1)
