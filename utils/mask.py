@@ -136,25 +136,27 @@ def hasPixel(image_vector, pixel):
     while True:
         count+=1
         i = int((end-init)/2) + init
+        # binary search
         if(image_vector[i]['x'] == pixel['x']):
             back_count = 0
             while image_vector[i-back_count]['x'] == pixel['x']:
                 back_count+=1
             back_count-=1
+            # sequential search
             while image_vector[i-back_count]['x'] == pixel['x']:
-                print(image_vector[i-back_count], "- ", pixel)
+                #print(image_vector[i-back_count], "- ", pixel)
                 if(image_vector[i-back_count]['y'] == pixel['y']):
-                    print(count)
+                    #print(count)
                     return True
                 i+=1
-            print(count)
+            #print(count)
             return False
         elif(image_vector[i]['x'] > pixel['x']):
             end = i
         else:
             init = i + 1
         if (end-init)<0:
-            print(count)
+            #print(count)
             return False
 
         
@@ -183,9 +185,10 @@ printBinaryImage(border_obstacle_1['image'], border_obstacle_1['dimensions'])
 printBinaryImage(border_obstacle_2['image'], border_obstacle_2['dimensions'])
 printBinaryImage(border_obstacle_3['image'], border_obstacle_3['dimensions']) """
 
-dino = reduceImageTo("./assets/dino.png", 1)
+""" dino = reduceImageTo("./assets/dino.png", 1)
 border_dino = getBorder(dino['image'], dino['dimensions'])
 border_coords = getBorderCoords(border_dino['image'], border_dino['dimensions'])
-border_coords = sortAxis(border_coords) 
-print(border_coords)
-print(hasPixel(border_coords, {'x': 21, 'y': 11}))
+border_coords = sortAxis(border_coords)
+print(len(border_coords))
+for i in range(20000):
+    hasPixel(border_coords, {'x': 21, 'y': 11}) """
