@@ -26,7 +26,10 @@ class ColisionMonitor:
         distance = sqrt(pow(ob_info['coords']['x'] - el_info['coords']['x'], 2) + pow(ob_info['coords']['y'] - el_info['coords']['y'], 2))
 
         if(distance<=el_info['radius_x']+ob_info['radius_x'] or distance<=el_info['radius_y']+ob_info['radius_y']):
-            return True
+            for pixel in obstacle.mask:
+                if(element.pixelInMask(pixel)):
+                    return True
+            return False
     def stop_all(self):
         for element in self.elements:
             if(element.moving_id):

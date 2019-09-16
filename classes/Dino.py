@@ -71,3 +71,33 @@ class Dino:
         self.distance = 0
         coords = self.canvas.coords(self.id)
         self.canvas.move(self.id, 0, 650-coords[1])
+    def pixelInMask(self, pixel):    
+        image_length = len(self.mask)
+        init = 0
+        end = image_length
+        count = 0
+        while True:
+            count+=1
+            i = int((end-init)/2) + init
+            # binary search
+            if(self.mask[i]['x'] == pixel['x']):
+                back_count = 0
+                while self.mask[i-back_count]['x'] == pixel['x']:
+                    back_count+=1
+                back_count-=1
+                # sequential search
+                while self.mask[i-back_count]['x'] == pixel['x']:
+                    #print(self.mask[i-back_count], "- ", pixel)
+                    if(self.mask[i-back_count]['y'] == pixel['y']):
+                        #print(count)
+                        return True
+                    i+=1
+                #print(count)
+                return False
+            elif(self.mask[i]['x'] > pixel['x']):
+                end = i
+            else:
+                init = i + 1
+            if (end-init)<0:
+                #print(count)
+                return False
