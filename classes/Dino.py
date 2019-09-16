@@ -5,6 +5,7 @@ The Dino can jump or bend in order to avoid the obstacles.
 """
 from tkinter import NW
 from PIL import Image, ImageTk
+import pickle
 
 class Dino:
     def __init__(self, master, canvas, jump_height=100):
@@ -18,6 +19,7 @@ class Dino:
         img_pil = Image.open("./assets/dino.png")
         self.image = ImageTk.PhotoImage(img_pil)
         self.id = self.canvas.create_image(100, 650, image=self.image, anchor=NW)
+        self.mask = pickle.load( open( "./data/mask/dino_mask", "rb" ) )
         self.onScreen = False
         self.master.bind('<Up>', self.jump_call)
         self.master.bind('<Down>', self.down)

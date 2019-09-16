@@ -5,6 +5,7 @@ The Dino can't colide with obstacles.
 """
 from tkinter import SW, NW
 from PIL import Image, ImageTk
+import pickle
 
 class Cactus:
     def __init__(self, master, canvas, kind = 3, onScreenOut = lambda x=None: x):
@@ -12,10 +13,13 @@ class Cactus:
         self.canvas = canvas
         if(kind == 3):
             img_pil = Image.open("./assets/obstacle-3x.png")
+            self.mask = pickle.load( open( "./data/mask/obstacle_3_mask", "rb" ) )
         elif(kind == 1):
             img_pil = Image.open("./assets/obstacle-1x.png")
+            self.mask = pickle.load( open( "./data/mask/obstacle_1_mask", "rb" ) )
         elif(kind == 2):
             img_pil = Image.open("./assets/obstacle-2x-small.png")
+            self.mask = pickle.load( open( "./data/mask/obstacle_2_mask", "rb" ) )
         self.image = ImageTk.PhotoImage(img_pil)
         self.id = self.canvas.create_image(800, 700, image=self.image, anchor=SW)
         self.moving_id = None

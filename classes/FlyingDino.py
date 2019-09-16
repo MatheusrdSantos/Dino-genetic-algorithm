@@ -5,6 +5,7 @@ The Dino can't colide with obstacles.
 """
 from tkinter import NW
 from PIL import Image, ImageTk
+import pickle
 class FlyingDino:
     def __init__(self, master, canvas, onScreenOut = lambda x=None: x, height=570):
         self.canvas = canvas
@@ -13,6 +14,7 @@ class FlyingDino:
         self.image = ImageTk.PhotoImage(img_pil)
         self.height = height
         self.id = canvas.create_image(900, self.height, image=self.image, anchor=NW)
+        self.mask = pickle.load( open( "./data/mask/flying_dino_mask", "rb" ) )
         self.moving_id = None
         self.onScreen = False
         self.onScreenOut = onScreenOut
