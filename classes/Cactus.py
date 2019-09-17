@@ -14,14 +14,17 @@ class Cactus:
         if(kind == 3):
             img_pil = Image.open("./assets/obstacle-3x.png")
             self.mask = pickle.load( open( "./data/mask/obstacle_3_mask", "rb" ) )
+            self.move_factor = {'x': 800, 'y': 652}
         elif(kind == 1):
             img_pil = Image.open("./assets/obstacle-1x.png")
             self.mask = pickle.load( open( "./data/mask/obstacle_1_mask", "rb" ) )
+            self.move_factor = {'x': 800, 'y': 650}
         elif(kind == 2):
             img_pil = Image.open("./assets/obstacle-2x-small.png")
             self.mask = pickle.load( open( "./data/mask/obstacle_2_mask", "rb" ) )
+            self.move_factor = {'x': 800, 'y': 665}
         self.image = ImageTk.PhotoImage(img_pil)
-        self.id = self.canvas.create_image(800, 700, image=self.image, anchor=SW)
+        self.id = self.canvas.create_image(self.move_factor['x'], self.move_factor['y'], image=self.image, anchor=NW)
         self.moving_id = None
         self.onScreenOut = onScreenOut
         self.onScreen = False
@@ -29,13 +32,19 @@ class Cactus:
         #self.getColisionInfo()
     def draw(self):
         if(self.canvas.coords(self.id)[0]<1):
-            self.canvas.move(self.id, 810, 0)
+            #self.canvas.move(self.id, 810, 0)
+            self.move(810, 0)
             self.onScreen = False
             self.onScreenOut()
         else:
             self.onScreen = True
-            self.canvas.move(self.id, -8.7, 0)
+            #self.canvas.move(self.id, -8.7, 0)
+            self.move(-9, 0)
             self.moving_id = self.canvas.after(20, self.draw)
+    def move(self, x=0, y=0):
+        self.canvas.move(self.id, x, y)
+        self.move_factor['x']+=x
+        self.move_factor['y']+=y
     def getBoderRightDistance(self):
         block_coords = self.canvas.bbox(self.id)
         distance = 800 - block_coords[2]
@@ -54,5 +63,6 @@ class Cactus:
         return {'radius_x': radius_block_x, 'radius_y': radius_block_y, 'coords': {'x': block_center_x, 'y': block_center_y}}
 
     def reset(self):
-        self.canvas.move(self.id, 810 - self.canvas.coords(self.id)[0], 0)
+        #self.canvas.move(self.id, 810 - self.canvas.coords(self.id)[0], 0)
+        self.move(810 - int(self.canvas.coords(self.id)[0]), 0)
         self.onScreen = False

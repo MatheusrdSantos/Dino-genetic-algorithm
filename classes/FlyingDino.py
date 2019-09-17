@@ -14,6 +14,7 @@ class FlyingDino:
         self.image = ImageTk.PhotoImage(img_pil)
         self.height = height
         self.id = canvas.create_image(900, self.height, image=self.image, anchor=NW)
+        self.move_factor = {'x': 900, 'y': self.height}
         self.mask = pickle.load( open( "./data/mask/flying_dino_mask", "rb" ) )
         self.moving_id = None
         self.onScreen = False
@@ -21,13 +22,19 @@ class FlyingDino:
         #self.draw()
     def draw(self):
         if(self.canvas.coords(self.id)[0]<1):
-            self.canvas.move(self.id, 900, 0)
+            #self.canvas.move(self.id, 900, 0)
+            self.move(900, 0)
             self.onScreen = False
             self.onScreenOut()
         else:
             self.onScreen = True
-            self.canvas.move(self.id, -8.7, 0)
+            #self.canvas.move(self.id, -8.7, 0)
+            self.move(-9, 0)
             self.moving_id = self.canvas.after(20, self.draw)
+    def move(self, x=0, y=0):
+        self.canvas.move(self.id, x, y)
+        self.move_factor['x']+=x
+        self.move_factor['y']+=y
     def getBoderRightDistance(self):
         block_coords = self.canvas.bbox(self.id)
         distance = 800 - block_coords[2]
@@ -45,5 +52,6 @@ class FlyingDino:
         #self.canvas.create_oval(block_coords[0], block_coords[1], block_coords[2], block_coords[3], fill="#fff")
         return {'radius_x': radius_block_x, 'radius_y': radius_block_y, 'coords': {'x': block_center_x, 'y': block_center_y}}
     def reset(self):
-        self.canvas.move(self.id, 900 - self.canvas.coords(self.id)[0], 0)
+        #self.canvas.move(self.id, 900 - self.canvas.coords(self.id)[0], 0)
+        self.move(900 - int(self.canvas.coords(self.id)[0]), 0)
         self.onScreen = False

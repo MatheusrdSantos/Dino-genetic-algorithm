@@ -20,6 +20,7 @@ class Dino:
         self.image = ImageTk.PhotoImage(img_pil)
         self.id = self.canvas.create_image(100, 650, image=self.image, anchor=NW)
         self.mask = pickle.load( open( "./data/mask/dino_mask", "rb" ) )
+        self.move_factor = {'x': 100, 'y': 650}
         self.onScreen = False
         self.master.bind('<Up>', self.jump_call)
         self.master.bind('<Down>', self.down)
@@ -31,15 +32,21 @@ class Dino:
     def jump(self, event):
         if(self.distance<self.jump_height):
             self.distance+=1
-            self.canvas.move(self.id, 0, -1)
+            #self.canvas.move(self.id, 0, -1)
+            self.move(0, -1)
             self.moving_id = self.canvas.after(3, self.jump, event)
         elif(self.distance>=self.jump_height and  self.canvas.coords(self.id)[-1]<650):
             self.distance+=1
-            self.canvas.move(self.id, 0, 1)
+            #self.canvas.move(self.id, 0, 1)
+            self.move(0, 1)
             self.moving_id = self.canvas.after(3, self.jump, event)
         else:
             self.distance = 0
             self.moving = False
+    def move(self, x=0, y=0):
+        self.canvas.move(self.id, x, y)
+        self.move_factor['x']+=x
+        self.move_factor['y']+=y
 
     def down(self, event):
         #print('down')
@@ -70,8 +77,11 @@ class Dino:
         self.moving = 0
         self.distance = 0
         coords = self.canvas.coords(self.id)
-        self.canvas.move(self.id, 0, 650-coords[1])
-    def pixelInMask(self, pixel):    
+        #self.canvas.move(self.id, 0, 650-coords[1])
+        self.move(0, 650-int(coords[1]))
+    def pixelInMask(self, pixel, move_factor):
+        #print("move f:", move_factor)
+        #print("pixel: ", pixel)
         image_length = len(self.mask)
         init = 0
         end = image_length
@@ -80,24 +90,28 @@ class Dino:
             count+=1
             i = int((end-init)/2) + init
             # binary search
-            if(self.mask[i]['x'] == pixel['x']):
+            #print(i)
+            #print(count)
+            #print(self.move_factor)
+            if(self.mask[i]['x']+self.move_factor['x'] == pixel['x']+move_factor['x']):
                 back_count = 0
-                while self.mask[i-back_count]['x'] == pixel['x']:
+                while self.mask[i-back_count]['x']+self.move_factor['x'] == pixel['x']+move_factor['x']:
                     back_count+=1
                 back_count-=1
+                #print(back_count)
                 # sequential search
-                while self.mask[i-back_count]['x'] == pixel['x']:
-                    #print(self.mask[i-back_count], "- ", pixel)
-                    if(self.mask[i-back_count]['y'] == pixel['y']):
+                while (i-back_count)>-1 and (i-back_count)<image_length and self.mask[i-back_count]['x']+self.move_factor['x'] == pixel['x']+move_factor['x']:
+                    #print(self.mask[i-back_count]['y']+self.move_factor['y'], "- ", pixel['y']+move_factor['y'])
+                    if(self.mask[i-back_count]['y']+self.move_factor['y'] == pixel['y']+move_factor['y']):
                         #print(count)
                         return True
                     i+=1
                 #print(count)
                 return False
-            elif(self.mask[i]['x'] > pixel['x']):
+            elif(self.mask[i]['x']+self.move_factor['x'] > pixel['x']+move_factor['x']):
                 end = i
             else:
                 init = i + 1
-            if (end-init)<0:
-                #print(count)
+            if (end-init)<=0:
+                #print("cond: ", count)
                 return False

@@ -14,6 +14,9 @@ class ColisionMonitor:
         self.verify_colisions()
         self.canvas.after(1, self.start)
     def verify_colisions(self):
+        """
+        TODO: verify colision only with the nearest obstacle
+        """
         for element in self.elements:
             for obstacle in self.obstacles:
                 if(self.crash(element, obstacle)):
@@ -27,7 +30,7 @@ class ColisionMonitor:
 
         if(distance<=el_info['radius_x']+ob_info['radius_x'] or distance<=el_info['radius_y']+ob_info['radius_y']):
             for pixel in obstacle.mask:
-                if(element.pixelInMask(pixel)):
+                if(element.pixelInMask(pixel, obstacle.move_factor)):
                     return True
             return False
     def stop_all(self):
