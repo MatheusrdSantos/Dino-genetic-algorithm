@@ -19,7 +19,7 @@ class ColisionMonitor:
         """
         for element in self.elements:
             for obstacle in self.obstacles:
-                if(self.crash(element, obstacle)):
+                if(obstacle.onScreen and self.crash(element, obstacle)):
                     self.stop_all()
                     return True
     def crash(self, element, obstacle):

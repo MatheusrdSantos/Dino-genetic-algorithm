@@ -3,7 +3,7 @@ import sys, os
 
 # chage this path to work in any computer directory
 sys.path.insert(1, os.path.dirname(os.path.dirname(os.path.dirname(os.path.realpath(__file__)))))
-from utils.mask import reduceImageTo, getBorder, getBorderCoords, sortAxis
+from utils.mask import reduceImageTo, getBorder, getBorderCoords, sortAxis, printBinaryImage
 
 dino = reduceImageTo("./assets/dino.png", 1)
 dino_border = getBorder(dino['image'], dino['dimensions'])
@@ -12,6 +12,15 @@ dino_border_coords = sortAxis(dino_border_coords)
 
 with open('./data/mask/dino_mask', 'wb') as f:
     pickle.dump(dino_border_coords, f)
+
+dino_down = reduceImageTo("./assets/dino-down.png", 1)
+dino_down_border = getBorder(dino_down['image'], dino_down['dimensions'])
+#printBinaryImage(dino_down_border['image'], dino_down['dimensions'])
+dino_down_border_coords = getBorderCoords(dino_down_border['image'], dino_down_border['dimensions'])
+dino_down_border_coords = sortAxis(dino_down_border_coords)
+
+with open('./data/mask/dino_down_mask', 'wb') as f:
+    pickle.dump(dino_down_border_coords, f)
 
 flying_dino = reduceImageTo("./assets/flying-dino.png", 1)
 flying_dino_border = getBorder(flying_dino['image'], flying_dino['dimensions'])

@@ -27,15 +27,15 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="1.3168661"
-     inkscape:cx="977.12287"
-     inkscape:cy="-604.94154"
+     inkscape:cx="3224.8189"
+     inkscape:cy="1443.8022"
      inkscape:document-units="mm"
      inkscape:current-layer="g4531"
      showgrid="false"
      inkscape:window-width="1920"
      inkscape:window-height="1016"
-     inkscape:window-x="0"
-     inkscape:window-y="27"
+     inkscape:window-x="900"
+     inkscape:window-y="387"
      inkscape:window-maximized="1"
      inkscape:snap-global="false" />
   <metadata
@@ -185,6 +185,21 @@
          inkscape:export-filename="/home/matheus/python-projects/dino-genetic-algorithm/assets/obstacle-2x-small.png"
          inkscape:export-xdpi="36.52174"
          inkscape:export-ydpi="36.52174" />
+      <path
+         style="fill:#000000;stroke-width:0.35277778"
+         d="m 810.24521,-258.41753 0.13614,-1.67569 -2.0409,-2.00894 -2.0409,-2.00893 v -0.90148 -0.90148 h 0.35278 0.35278 v 0.35277 0.35278 h 0.70555 0.70556 v 0.35278 0.35278 h 1.41111 1.41111 v -0.35278 -0.35278 h 2.99861 2.99861 v 0.35278 0.35278 h 0.68036 0.68036 l 0.52916,-0.52917 0.52917,-0.52917 h 2.51984 2.51984 l 0.50397,0.50397 0.50397,0.50397 v 1.43631 1.43631 h -1.76389 -1.76389 v 0.35278 0.35278 h 1.05833 1.05834 v 0.35277 0.35278 h -2.46945 -2.46944 v -0.35278 -0.35277 h -0.70556 -0.70555 v 0.49977 0.49976 l -0.44097,0.20579 -0.44098,0.20579 0.44098,0.20578 0.44097,0.20579 v 0.32338 0.32338 h -0.70556 -0.70555 v -0.70556 -0.70555 l -0.97014,0.0279 -0.97014,0.0278 0.44097,0.17794 0.44097,0.17793 v 0.32338 0.32338 h -0.88194 -0.88195 v -0.35278 -0.35277 h -0.5452 -0.5452 l -0.94408,0.94408 -0.94408,0.94408 0.43095,0.14365 0.43095,0.14365 v 0.32338 0.32338 h -0.74108 -0.74108 z m 10.51823,-5.73263 v -0.35278 h -0.35278 -0.35278 v 0.35278 0.35277 h 0.35278 0.35278 z"
+         id="path1661-6-3"
+         inkscape:connector-curvature="0"
+         sodipodi:nodetypes="cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc" />
+      <path
+         style="fill:#000000;stroke-width:0.35277778"
+         d="m 789.13666,-258.61939 v -1.41111 h -0.70555 -0.70556 v 0.35277 0.35278 h 0.35278 0.35278 v 0.35278 0.35278 h -0.74668 -0.74668 l 0.17946,-0.93883 0.17947,-0.93882 -2.07862,-2.04025 -2.07862,-2.04025 v -0.90148 -0.90148 h 0.35278 0.35278 v 0.35277 0.35278 h 0.70555 0.70556 v 0.35278 0.35278 h 1.41111 1.41111 v -0.35278 -0.35278 h 2.99861 2.99861 v 0.35278 0.35278 h 0.68036 0.68036 l 0.52916,-0.52917 0.52917,-0.52917 h 2.51984 2.51984 l 0.50397,0.50397 0.50397,0.50397 v 1.43631 1.43631 h -1.76389 -1.76389 v 0.35278 0.35278 h 1.05833 1.05834 v 0.35277 0.35278 h -2.46945 -2.46944 v -0.35278 -0.35277 h -0.70556 -0.70555 v 0.49977 0.49976 l -0.44097,0.20579 -0.44098,0.20579 0.44098,0.20578 0.44097,0.20579 v 0.32338 0.32338 H 794.07555 793.37 v -0.70556 -0.70555 h -0.75556 -0.75556 l -1.07458,1.12444 -1.07458,1.12445 0.41903,0.13968 0.41902,0.13967 v 0.32338 0.32338 h -0.70555 -0.70556 z m 8.46667,-5.99722 v -0.35278 h -0.35278 -0.35278 v 0.35278 0.35277 h 0.35278 0.35278 z"
+         id="path1661-6-3-6"
+         inkscape:connector-curvature="0"
+         sodipodi:nodetypes="cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+         inkscape:export-filename="/home/camajus/python-projects/Dino-genetic-algorithm/assets/dino-down.png"
+         inkscape:export-xdpi="65.45462"
+         inkscape:export-ydpi="65.45462" />
     </g>
   </g>
 </svg>

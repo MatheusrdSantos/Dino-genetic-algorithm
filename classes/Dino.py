@@ -13,13 +13,18 @@ class Dino:
         self.canvas = canvas
         self.jump_height = jump_height
         self.moving = False
+        self.bent = False
         self.distance = 0
         self.moving_id = None
+        self.moving_bent_id = None
         #TODO: change image names
-        img_pil = Image.open("./assets/dino.png")
-        self.image = ImageTk.PhotoImage(img_pil)
+        self.img_pil_bent = Image.open("./assets/dino-down.png")
+        self.img_pil_default = Image.open("./assets/dino.png")
+        self.image = ImageTk.PhotoImage(self.img_pil_default)
         self.id = self.canvas.create_image(100, 650, image=self.image, anchor=NW)
-        self.mask = pickle.load( open( "./data/mask/dino_mask", "rb" ) )
+        self.mask_bent = pickle.load( open( "./data/mask/dino_down_mask", "rb" ) )
+        self.mask_default = pickle.load( open( "./data/mask/dino_mask", "rb" ) )
+        self.mask = self.mask_default
         self.move_factor = {'x': 100, 'y': 650}
         self.onScreen = False
         self.master.bind('<Up>', self.jump_call)
@@ -47,6 +52,7 @@ class Dino:
         self.canvas.move(self.id, x, y)
         self.move_factor['x']+=x
         self.move_factor['y']+=y
+        
 
     def down(self, event):
         #print('down')
@@ -56,6 +62,23 @@ class Dino:
             self.distance = self.jump_height
             #coords = self.canvas.coords(self.id)
             #self.canvas.move(self.id, 0, 650-coords[1])
+        else:
+            if(not self.bent):
+                self.mask = self.mask_bent
+                self.move(0, 26)
+                self.image = ImageTk.PhotoImage(self.img_pil_down)
+                self.canvas.itemconfig(self.id, image = self.image)
+                self.bent = True
+            if(self.moving_bent_id != None):
+                self.canvas.after_cancel(self.moving_bent_id)
+            self.moving_bent_id = self.canvas.after(500, self.awake)
+    def awake(self):
+        if(self.bent):
+            self.mask = self.mask_default
+            self.move(0, -26)
+            self.image = ImageTk.PhotoImage(self.img_pil_default)
+            self.canvas.itemconfig(self.id, image = self.image)
+            self.bent = False
     def getColisionInfo(self):
         # [left, top, right, bottom]
         block_coords = self.canvas.bbox(self.id)
