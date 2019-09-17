@@ -17,7 +17,7 @@ class ObstacleGenerator:
             Cactus(self.master, self.canvas, 1, self.decraseObstaclesOnscreen),
             Cactus(self.master, self.canvas, 2, self.decraseObstaclesOnscreen),
             FlyingDino(self.master, self.canvas, self.decraseObstaclesOnscreen),
-            FlyingDino(self.master, self.canvas, self.decraseObstaclesOnscreen, 650)]
+            FlyingDino(self.master, self.canvas, self.decraseObstaclesOnscreen, 625)]
         self.lastOnScreenIndex = 0
         self.skipDistance = 0
     def run(self):

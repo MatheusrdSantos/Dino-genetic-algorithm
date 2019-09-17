@@ -6,6 +6,7 @@ The Dino can jump or bend in order to avoid the obstacles.
 from tkinter import NW
 from PIL import Image, ImageTk
 import pickle
+import keyboard
 
 class Dino:
     def __init__(self, master, canvas, jump_height=100):
@@ -27,8 +28,11 @@ class Dino:
         self.mask = self.mask_default
         self.move_factor = {'x': 100, 'y': 650}
         self.onScreen = False
+        keyboard.on_press_key('down', self.down)
+        keyboard.on_release_key('down', self.awake)
         self.master.bind('<Up>', self.jump_call)
-        self.master.bind('<Down>', self.down)
+        #self.master.bind('<Down>', self.down)
+        #self.master.bind('<DownLeave>', self.awake)
         #self.getColisionInfo()
     def jump_call(self, event):
         if(not self.moving):
@@ -55,7 +59,6 @@ class Dino:
         
 
     def down(self, event):
-        #print('down')
         if(self.moving):
             #self.master.after_cancel(self.moving_id)
             #self.moving = False
@@ -66,12 +69,12 @@ class Dino:
             if(not self.bent):
                 self.mask = self.mask_bent
                 self.move(0, 26)
-                self.image = ImageTk.PhotoImage(self.img_pil_down)
+                self.image = ImageTk.PhotoImage(self.img_pil_bent)
                 self.canvas.itemconfig(self.id, image = self.image)
                 self.bent = True
-            if(self.moving_bent_id != None):
+            """ if(self.moving_bent_id != None):
                 self.canvas.after_cancel(self.moving_bent_id)
-            self.moving_bent_id = self.canvas.after(500, self.awake)
+            self.moving_bent_id = self.canvas.after(400, self.awake) """
     def awake(self):
         if(self.bent):
             self.mask = self.mask_default
@@ -79,6 +82,7 @@ class Dino:
             self.image = ImageTk.PhotoImage(self.img_pil_default)
             self.canvas.itemconfig(self.id, image = self.image)
             self.bent = False
+            self.moving_bent_id = None
     def getColisionInfo(self):
         # [left, top, right, bottom]
         block_coords = self.canvas.bbox(self.id)
