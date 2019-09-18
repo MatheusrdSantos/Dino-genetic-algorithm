@@ -22,6 +22,10 @@ class Dino:
         self.move_factor = {'x': 100, 'y': 650}
         # load default image
         self.img_pil_bent = Image.open("./assets/dino-down.png")
+        self.imgs_pil_bent_running = [
+            Image.open("./assets/dino-down.png"),
+            Image.open("./assets/dino-down-1.png")]
+        self.current_pil_bent_running_index = 0 
         self.img_pil_default = Image.open("./assets/dino.png")
         self.imgs_pil_running = [
             Image.open("./assets/dino.png"),
@@ -44,13 +48,24 @@ class Dino:
     def animate(self):
         if(not self.moving):
             if(not self.bent):
-                self.canvas.after(100, self.changeRaiseImage)
+                self.canvas.after(130, self.changeRaiseImage)
+            else:
+                self.canvas.after(200, self.changeBentImage)
+
     def changeRaiseImage(self):
         if(not self.bent):
             self.current_pil_running_index+=1
             if(self.current_pil_running_index>2):
                 self.current_pil_running_index = 0
             self.image = ImageTk.PhotoImage(self.imgs_pil_running[self.current_pil_running_index])
+            self.canvas.itemconfig(self.id, image = self.image)
+        self.animate()
+    def changeBentImage(self):
+        if(self.bent):
+            self.current_pil_bent_running_index+=1
+            if(self.current_pil_bent_running_index>1):
+                self.current_pil_bent_running_index = 0
+            self.image = ImageTk.PhotoImage(self.imgs_pil_bent_running[self.current_pil_bent_running_index])
             self.canvas.itemconfig(self.id, image = self.image)
         self.animate()
     def jump_call(self, event):
@@ -82,7 +97,7 @@ class Dino:
         else:
             if(not self.bent):
                 self.mask = self.mask_bent
-                self.move(0, 26)
+                self.move(0, 20)
                 self.image = ImageTk.PhotoImage(self.img_pil_bent)
                 self.canvas.itemconfig(self.id, image = self.image)
                 self.bent = True
@@ -90,7 +105,7 @@ class Dino:
     def raiseDino(self, event):
         if(self.bent):
             self.mask = self.mask_default
-            self.move(0, -26)
+            self.move(0, -20)
             self.image = ImageTk.PhotoImage(self.img_pil_default)
             self.canvas.itemconfig(self.id, image = self.image)
             self.bent = False
