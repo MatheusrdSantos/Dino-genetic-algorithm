@@ -23,6 +23,11 @@ class Dino:
         # load default image
         self.img_pil_bent = Image.open("./assets/dino-down.png")
         self.img_pil_default = Image.open("./assets/dino.png")
+        self.imgs_pil_running = [
+            Image.open("./assets/dino.png"),
+            Image.open("./assets/dino-1.png"),
+            Image.open("./assets/dino-2.png")]
+        self.current_pil_running_index = 0    
         self.image = ImageTk.PhotoImage(self.img_pil_default)
         # display image on canvas
         self.id = self.canvas.create_image(100, 650, image=self.image, anchor=NW)
@@ -34,7 +39,20 @@ class Dino:
         # keyboard events
         keyboard.on_release_key('down', self.raiseDino)
         keyboard.on_press_key('down', self.down)
+        self.animate()
 
+    def animate(self):
+        if(not self.moving):
+            if(not self.bent):
+                self.canvas.after(100, self.changeRaiseImage)
+    def changeRaiseImage(self):
+        if(not self.bent):
+            self.current_pil_running_index+=1
+            if(self.current_pil_running_index>2):
+                self.current_pil_running_index = 0
+            self.image = ImageTk.PhotoImage(self.imgs_pil_running[self.current_pil_running_index])
+            self.canvas.itemconfig(self.id, image = self.image)
+        self.animate()
     def jump_call(self, event):
         if(not self.moving):
             self.moving = True
@@ -51,6 +69,7 @@ class Dino:
         else:
             self.distance = 0
             self.moving = False
+            self.animate()
 
     def move(self, x=0, y=0):
         self.canvas.move(self.id, x, y)
@@ -76,6 +95,7 @@ class Dino:
             self.canvas.itemconfig(self.id, image = self.image)
             self.bent = False
             self.moving_bent_id = None
+            self.animate()
 
     def getColisionInfo(self):
         # [left, top, right, bottom]
