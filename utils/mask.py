@@ -1,6 +1,7 @@
 from PIL import Image
 import numpy as np
 from colr import color
+import pickle
 
 def printImage(image_path, bg=False):
     img_pil = Image.open(image_path)
@@ -153,3 +154,18 @@ def hasPixel(image_vector, pixel):
             init = i + 1
         if (end-init)<0:
             return False
+
+
+def generateMaskData(imageName, maskName):
+    """
+        Generates mask data for collision monitor
+    """
+    ASSETS_PATH = "./assets/"
+    MASK_PATH = "./data/mask/"
+    image_resized = reduceImageTo(ASSETS_PATH+imageName, 1)
+    image_border = getBorder(image_resized['image'], image_resized['dimensions'])
+    image_border_coords = getBorderCoords(image_border['image'], image_border['dimensions'])
+    image_border_coords = sortAxis(image_border_coords)
+
+    with open(MASK_PATH+maskName, 'wb') as f:
+        pickle.dump(image_border_coords, f)
