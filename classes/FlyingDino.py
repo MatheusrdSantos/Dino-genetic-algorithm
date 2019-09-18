@@ -10,15 +10,17 @@ class FlyingDino:
     def __init__(self, master, canvas, onScreenOut = lambda x=None: x, height=570):
         self.canvas = canvas
         self.master = master
-        img_pil = Image.open("./assets/flying-dino.png")
-        self.image = ImageTk.PhotoImage(img_pil)
-        self.height = height
-        self.id = canvas.create_image(900, self.height, image=self.image, anchor=NW)
-        self.move_factor = {'x': 900, 'y': self.height}
-        self.mask = pickle.load( open( "./data/mask/flying_dino_mask", "rb" ) )
         self.moving_id = None
         self.onScreen = False
         self.onScreenOut = onScreenOut
+        self.height = height
+        self.move_factor = {'x': 900, 'y': self.height}
+        # load image
+        img_pil = Image.open("./assets/flying-dino.png")
+        self.image = ImageTk.PhotoImage(img_pil)
+        self.id = canvas.create_image(900, self.height, image=self.image, anchor=NW)
+        #load mask
+        self.mask = pickle.load( open( "./data/mask/flying_dino_mask", "rb" ) )
 
     def draw(self):
         if(self.canvas.coords(self.id)[0]<1):

@@ -18,20 +18,23 @@ class Dino:
         self.distance = 0
         self.moving_id = None
         self.moving_bent_id = None
-        #TODO: change image names
+        self.onScreen = False
+        self.move_factor = {'x': 100, 'y': 650}
+        # load default image
         self.img_pil_bent = Image.open("./assets/dino-down.png")
         self.img_pil_default = Image.open("./assets/dino.png")
         self.image = ImageTk.PhotoImage(self.img_pil_default)
+        # display image on canvas
         self.id = self.canvas.create_image(100, 650, image=self.image, anchor=NW)
+        #load mask
         self.mask_bent = pickle.load( open( "./data/mask/dino_down_mask", "rb" ) )
         self.mask_default = pickle.load( open( "./data/mask/dino_mask", "rb" ) )
         self.mask = self.mask_default
-        self.move_factor = {'x': 100, 'y': 650}
-        self.onScreen = False
-        keyboard.on_press_key('down', self.down)
-        keyboard.on_release_key('down', self.raiseDino)
         self.master.bind('<Up>', self.jump_call)
-        
+        # keyboard events
+        keyboard.on_release_key('down', self.raiseDino)
+        keyboard.on_press_key('down', self.down)
+
     def jump_call(self, event):
         if(not self.moving):
             self.moving = True
@@ -101,11 +104,10 @@ class Dino:
         image_length = len(self.mask)
         init = 0
         end = image_length
-        count = 0
         while True:
-            count+=1
             i = int((end-init)/2) + init
             # binary search
+            #if the mask pixel has the same X axis
             if(self.mask[i]['x']+self.move_factor['x'] == pixel['x']+move_factor['x']):
                 back_count = 0
                 while self.mask[i-back_count]['x']+self.move_factor['x'] == pixel['x']+move_factor['x']:
@@ -117,9 +119,12 @@ class Dino:
                         return True
                     i+=1
                 return False
+            # if the current mask pixel has a greater X axis, ignore the right side
             elif(self.mask[i]['x']+self.move_factor['x'] > pixel['x']+move_factor['x']):
                 end = i
             else:
+                # else ignore the right side
                 init = i + 1
+            # if the pixel with the same X axis wasn't found
             if (end-init)<=0:
                 return False

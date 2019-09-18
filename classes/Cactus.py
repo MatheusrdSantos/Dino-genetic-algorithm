@@ -11,6 +11,9 @@ class Cactus:
     def __init__(self, master, canvas, kind = 3, onScreenOut = lambda x=None: x):
         self.master = master
         self.canvas = canvas
+        self.moving_id = None
+        self.onScreenOut = onScreenOut
+        self.onScreen = False
         if(kind == 3):
             img_pil = Image.open("./assets/obstacle-3x.png")
             self.mask = pickle.load( open( "./data/mask/obstacle_3_mask", "rb" ) )
@@ -25,9 +28,6 @@ class Cactus:
             self.move_factor = {'x': 800, 'y': 665}
         self.image = ImageTk.PhotoImage(img_pil)
         self.id = self.canvas.create_image(self.move_factor['x'], self.move_factor['y'], image=self.image, anchor=NW)
-        self.moving_id = None
-        self.onScreenOut = onScreenOut
-        self.onScreen = False
 
     def draw(self):
         if(self.canvas.coords(self.id)[0]<1):

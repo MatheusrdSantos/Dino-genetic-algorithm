@@ -1,9 +1,7 @@
 import pickle
 import sys, os
-
-# chage this path to work in any computer directory
 sys.path.insert(1, os.path.dirname(os.path.dirname(os.path.dirname(os.path.realpath(__file__)))))
-from utils.mask import reduceImageTo, getBorder, getBorderCoords, sortAxis, printBinaryImage, generateMaskData
+from utils.mask import generateMaskData
 
 generateMaskData("dino.png", "dino_mask")
 generateMaskData("dino-down.png", "dino_down_mask")
