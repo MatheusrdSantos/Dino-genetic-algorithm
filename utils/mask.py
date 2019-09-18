@@ -39,7 +39,6 @@ def reduceImageTo(image_path, reduceRatio):
             # searchs in depht a black pixel 
             for k in range(0, reduceRatio):
                 original_pixel_pos = (line_count*originalDimension[0]*(reduceRatio-1))+(i*reduceRatio)+j + ((k)*originalDimension[0])
-                #print(original_pixel_pos)
                 if(image_list[original_pixel_pos][3] == 255):
                     new_image[i] = 1
                     break
@@ -144,51 +143,13 @@ def hasPixel(image_vector, pixel):
             back_count-=1
             # sequential search
             while image_vector[i-back_count]['x'] == pixel['x']:
-                #print(image_vector[i-back_count], "- ", pixel)
                 if(image_vector[i-back_count]['y'] == pixel['y']):
-                    #print(count)
                     return True
                 i+=1
-            #print(count)
             return False
         elif(image_vector[i]['x'] > pixel['x']):
             end = i
         else:
             init = i + 1
         if (end-init)<0:
-            #print(count)
             return False
-
-        
-
-""" dino = reduceImageTo("./assets/dino.png", 1)
-flying_dino = reduceImageTo("./assets/flying-dino.png", 1)
-obstacle_1 = reduceImageTo("./assets/obstacle-1x.png", 1)
-obstacle_2 = reduceImageTo("./assets/obstacle-2x-small.png", 1)
-obstacle_3 = reduceImageTo("./assets/obstacle-3x.png", 1)
-
-printBinaryImage(dino['image'], dino['dimensions'])
-printBinaryImage(flying_dino['image'], flying_dino['dimensions'])
-printBinaryImage(obstacle_1['image'], obstacle_1['dimensions'])
-printBinaryImage(obstacle_2['image'], obstacle_2['dimensions'])
-printBinaryImage(obstacle_3['image'], obstacle_3['dimensions'])
-
-border_dino = getBorder(dino['image'], dino['dimensions'])
-border_flying_dino = getBorder(flying_dino['image'], flying_dino['dimensions'])
-border_obstacle_1 = getBorder(obstacle_1['image'], obstacle_1['dimensions'])
-border_obstacle_2 = getBorder(obstacle_2['image'], obstacle_2['dimensions'])
-border_obstacle_3 = getBorder(obstacle_3['image'], obstacle_3['dimensions'])
-
-printBinaryImage(border_dino['image'], border_dino['dimensions'])
-printBinaryImage(border_flying_dino['image'], border_flying_dino['dimensions'])
-printBinaryImage(border_obstacle_1['image'], border_obstacle_1['dimensions'])
-printBinaryImage(border_obstacle_2['image'], border_obstacle_2['dimensions'])
-printBinaryImage(border_obstacle_3['image'], border_obstacle_3['dimensions']) """
-
-""" dino = reduceImageTo("./assets/dino.png", 1)
-border_dino = getBorder(dino['image'], dino['dimensions'])
-border_coords = getBorderCoords(border_dino['image'], border_dino['dimensions'])
-border_coords = sortAxis(border_coords)
-print(len(border_coords))
-for i in range(20000):
-    hasPixel(border_coords, {'x': 21, 'y': 11}) """

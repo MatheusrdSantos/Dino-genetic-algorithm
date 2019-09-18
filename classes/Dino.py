@@ -31,7 +31,7 @@ class Dino:
         keyboard.on_press_key('down', self.down)
         keyboard.on_release_key('down', self.raiseDino)
         self.master.bind('<Up>', self.jump_call)
-        #self.getColisionInfo()
+        
     def jump_call(self, event):
         if(not self.moving):
             self.moving = True
@@ -39,30 +39,24 @@ class Dino:
     def jump(self, event):
         if(self.distance<self.jump_height):
             self.distance+=1
-            #self.canvas.move(self.id, 0, -1)
             self.move(0, -1)
             self.moving_id = self.canvas.after(3, self.jump, event)
         elif(self.distance>=self.jump_height and  self.canvas.coords(self.id)[-1]<650):
             self.distance+=1
-            #self.canvas.move(self.id, 0, 1)
             self.move(0, 1)
             self.moving_id = self.canvas.after(3, self.jump, event)
         else:
             self.distance = 0
             self.moving = False
+
     def move(self, x=0, y=0):
         self.canvas.move(self.id, x, y)
         self.move_factor['x']+=x
         self.move_factor['y']+=y
         
-
     def down(self, event):
         if(self.moving):
-            #self.master.after_cancel(self.moving_id)
-            #self.moving = False
             self.distance = self.jump_height
-            #coords = self.canvas.coords(self.id)
-            #self.canvas.move(self.id, 0, 650-coords[1])
         else:
             if(not self.bent):
                 self.mask = self.mask_bent
@@ -70,6 +64,7 @@ class Dino:
                 self.image = ImageTk.PhotoImage(self.img_pil_bent)
                 self.canvas.itemconfig(self.id, image = self.image)
                 self.bent = True
+
     def raiseDino(self, event):
         if(self.bent):
             self.mask = self.mask_default
@@ -78,6 +73,7 @@ class Dino:
             self.canvas.itemconfig(self.id, image = self.image)
             self.bent = False
             self.moving_bent_id = None
+
     def getColisionInfo(self):
         # [left, top, right, bottom]
         block_coords = self.canvas.bbox(self.id)
@@ -93,17 +89,15 @@ class Dino:
         # the y coord of the middle point
         block_center_y = radius_block_y + block_coords[1]
 
-        #self.canvas.create_oval(block_coords[0], block_coords[1], block_coords[2], block_coords[3], fill="#fff")
         return {'radius_x': radius_block_x, 'radius_y': radius_block_y, 'coords': {'x': block_center_x, 'y': block_center_y}}
+
     def reset(self):
         self.moving = 0
         self.distance = 0
         coords = self.canvas.coords(self.id)
-        #self.canvas.move(self.id, 0, 650-coords[1])
         self.move(0, 650-int(coords[1]))
+
     def pixelInMask(self, pixel, move_factor):
-        #print("move f:", move_factor)
-        #print("pixel: ", pixel)
         image_length = len(self.mask)
         init = 0
         end = image_length
@@ -112,28 +106,20 @@ class Dino:
             count+=1
             i = int((end-init)/2) + init
             # binary search
-            #print(i)
-            #print(count)
-            #print(self.move_factor)
             if(self.mask[i]['x']+self.move_factor['x'] == pixel['x']+move_factor['x']):
                 back_count = 0
                 while self.mask[i-back_count]['x']+self.move_factor['x'] == pixel['x']+move_factor['x']:
                     back_count+=1
                 back_count-=1
-                #print(back_count)
                 # sequential search
                 while (i-back_count)>-1 and (i-back_count)<image_length and self.mask[i-back_count]['x']+self.move_factor['x'] == pixel['x']+move_factor['x']:
-                    #print(self.mask[i-back_count]['y']+self.move_factor['y'], "- ", pixel['y']+move_factor['y'])
                     if(self.mask[i-back_count]['y']+self.move_factor['y'] == pixel['y']+move_factor['y']):
-                        #print(count)
                         return True
                     i+=1
-                #print(count)
                 return False
             elif(self.mask[i]['x']+self.move_factor['x'] > pixel['x']+move_factor['x']):
                 end = i
             else:
                 init = i + 1
             if (end-init)<=0:
-                #print("cond: ", count)
                 return False

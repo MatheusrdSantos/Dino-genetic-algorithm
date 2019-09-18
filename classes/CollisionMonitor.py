@@ -33,6 +33,7 @@ class ColisionMonitor:
                 if(element.pixelInMask(pixel, obstacle.move_factor)):
                     return True
             return False
+            
     def stop_all(self):
         for element in self.elements:
             if(element.moving_id):
