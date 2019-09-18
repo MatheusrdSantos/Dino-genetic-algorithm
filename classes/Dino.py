@@ -29,10 +29,8 @@ class Dino:
         self.move_factor = {'x': 100, 'y': 650}
         self.onScreen = False
         keyboard.on_press_key('down', self.down)
-        keyboard.on_release_key('down', self.awake)
+        keyboard.on_release_key('down', self.raiseDino)
         self.master.bind('<Up>', self.jump_call)
-        #self.master.bind('<Down>', self.down)
-        #self.master.bind('<DownLeave>', self.awake)
         #self.getColisionInfo()
     def jump_call(self, event):
         if(not self.moving):
@@ -72,10 +70,7 @@ class Dino:
                 self.image = ImageTk.PhotoImage(self.img_pil_bent)
                 self.canvas.itemconfig(self.id, image = self.image)
                 self.bent = True
-            """ if(self.moving_bent_id != None):
-                self.canvas.after_cancel(self.moving_bent_id)
-            self.moving_bent_id = self.canvas.after(400, self.awake) """
-    def awake(self):
+    def raiseDino(self, event):
         if(self.bent):
             self.mask = self.mask_default
             self.move(0, -26)
