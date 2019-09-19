@@ -31,10 +31,25 @@ class GameController:
         # display image on canvas
         self.ground_id = self.canvas.create_image(0, 700, image=self.ground, anchor=NW)
         self.ground_id_1 = self.canvas.create_image(400, 700, image=self.ground_1, anchor=NW)
+        self.ground_id_2 = self.canvas.create_image(800, 700, image=self.ground, anchor=NW)
+    def animateGround(self):
+        self.canvas.move(self.ground_id, -9, 0)
+        self.canvas.move(self.ground_id_1, -9, 0)
+        self.canvas.move(self.ground_id_2, -9, 0)
+        #[left top right bottom]
+        if(self.canvas.coords(self.ground_id)[0]<-400):
+            self.canvas.move(self.ground_id, 1200, 0)
+        if(self.canvas.coords(self.ground_id_1)[0]<-400):
+            self.canvas.move(self.ground_id_1, 1200, 0)
+        if(self.canvas.coords(self.ground_id_2)[0]<-400):
+            self.canvas.move(self.ground_id_2, 1200, 0)
+        self.canvas.after(20, self.animateGround)
+    
     def run(self):
         if(self.mode == "game"):
             self.canvas.pack()
             self.prepareGame()
+            self.animateGround()
             mainloop()
     # create game elements
     def prepareGame(self):

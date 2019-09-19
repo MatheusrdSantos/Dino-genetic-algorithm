@@ -21,10 +21,10 @@ class Dino:
         self.onScreen = False
         self.move_factor = {'x': 100, 'y': 650}
         # load default image
-        self.img_pil_bent = Image.open("./assets/dino-down.png")
         self.imgs_pil_bent_running = [
             Image.open("./assets/dino-down.png"),
             Image.open("./assets/dino-down-1.png")]
+        self.img_pil_bent = self.imgs_pil_bent_running[0]
         self.current_pil_bent_running_index = 0 
         self.img_pil_default = Image.open("./assets/dino.png")
         self.imgs_pil_running = [
