@@ -4,12 +4,13 @@ Description: this class monitors the game elements. If a collision is detected, 
 """
 from math import sqrt, pow
 class ColisionMonitor:
-    def __init__(self, master, canvas, elements = [], obstacles = []):
+    def __init__(self, master, canvas, onCollid, elements = [], obstacles = []):
         self.master = master
         self.canvas = canvas
         # elements that can't crash with blocks
         self.elements = elements
         self.obstacles = obstacles
+        self.onCollid = onCollid
     def start(self):
         self.verify_colisions()
         self.canvas.after(1, self.start)
@@ -41,3 +42,4 @@ class ColisionMonitor:
         for obstacle in self.obstacles:
             if(obstacle.moving_id):
                 self.canvas.after_cancel(obstacle.moving_id)
+        self.onCollid()

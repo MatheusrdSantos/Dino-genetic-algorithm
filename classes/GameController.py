@@ -17,7 +17,7 @@ class GameController:
         self.mode = mode
         self.master = Tk()
         self.canvas = Canvas(self.master, width=800, height=800, bg='#eee')
-        self.colisionMonitor = ColisionMonitor(self.master, self.canvas)
+        self.colisionMonitor = ColisionMonitor(self.master, self.canvas, self.stopGround)
         self.dinos = []
         self.obstacles = []
         self.colisionMonitor = None
@@ -32,6 +32,7 @@ class GameController:
         self.ground_id = self.canvas.create_image(0, 700, image=self.ground, anchor=NW)
         self.ground_id_1 = self.canvas.create_image(400, 700, image=self.ground_1, anchor=NW)
         self.ground_id_2 = self.canvas.create_image(800, 700, image=self.ground, anchor=NW)
+        self.ground_animation_id = None
     def animateGround(self):
         self.canvas.move(self.ground_id, -9, 0)
         self.canvas.move(self.ground_id_1, -9, 0)
@@ -43,7 +44,7 @@ class GameController:
             self.canvas.move(self.ground_id_1, 1200, 0)
         if(self.canvas.coords(self.ground_id_2)[0]<-400):
             self.canvas.move(self.ground_id_2, 1200, 0)
-        self.canvas.after(20, self.animateGround)
+        self.ground_animation_id = self.canvas.after(20, self.animateGround)
     
     def run(self):
         if(self.mode == "game"):
@@ -56,10 +57,13 @@ class GameController:
         self.dinos.append(Dino(self.master, self.canvas))
         self.obstacleGenerator = ObstacleGenerator(self.master, self.canvas)
         self.obstacleGenerator.run()
-        self.colisionMonitor = ColisionMonitor(self.master, self.canvas, self.dinos, self.obstacleGenerator.obstacles)
+        self.colisionMonitor = ColisionMonitor(self.master, self.canvas, self.stopGround, self.dinos, self.obstacleGenerator.obstacles)
         self.colisionMonitor.start()
+    def stopGround(self):
+        self.canvas.after_cancel(self.ground_animation_id)
     def restart(self, event):
         for dino in self.dinos:
             dino.reset()
+        self.animateGround()
         self.obstacleGenerator.reset()
         self.obstacleGenerator.run()
