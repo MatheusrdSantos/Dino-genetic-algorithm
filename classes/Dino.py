@@ -55,6 +55,9 @@ class Dino:
                 self.canvas.after(130, self.changeRaiseImage)
             else:
                 self.canvas.after(200, self.changeBentImage)
+    def run(self):
+        self.brain.takeAction(None)
+        self.canvas.after(10, self.run)
 
     def changeRaiseImage(self):
         if(not self.bent):
