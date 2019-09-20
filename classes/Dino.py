@@ -11,7 +11,7 @@ import keyboard
 import numpy as np
 
 class Dino:
-    def __init__(self, master, canvas, brain, game_params,jump_height=100):
+    def __init__(self, master, canvas, brain, game_params,jump_height=100, mode="game"):
         self.master = master
         self.canvas = canvas
         self.jump_height = jump_height
@@ -24,8 +24,9 @@ class Dino:
         self.move_factor = {'x': 100, 'y': 650}
         self.brain = brain
         self.game_params = game_params
-        self.brain.jumpAction = self.jump_call
+        self.brain.jumpAction = self.jump_brain_call
         self.brain.bendAction = self.down
+        self.mode = mode
         # load default image
         self.imgs_pil_bent_running = [
             Image.open("./assets/dino-down.png"),
@@ -58,9 +59,11 @@ class Dino:
             else:
                 self.canvas.after(200, self.changeBentImage)
     def run(self):
-        self.brain.takeAction(self.prepareInput())
+        if(self.mode == "train"):
+            self.brain.takeAction(self.prepareInput())
         self.canvas.after(10, self.run)
     def prepareInput(self):
+        print(self.game_params)
         return np.array([[
             self.game_params['distance'],
             self.game_params['width'],
@@ -84,12 +87,14 @@ class Dino:
         self.animate()
     def jump_call(self, event):
         if(not self.moving):
+            self.raiseDino(None)
             self.moving = True
-            
-            """ self.current_pil_running_index = 0
-            self.image = ImageTk.PhotoImage(self.imgs_pil_running[self.current_pil_running_index])
-            self.canvas.itemconfig(self.id, image = self.image) """
+            self.jump(event)
 
+    def jump_brain_call(self, event):
+        if(not self.moving):
+            self.raiseDino(None)
+            self.moving = True
             self.jump(event)
     def jump(self, event):
         if(self.distance<self.jump_height):
@@ -186,3 +191,8 @@ class Dino:
             # if the pixel with the same X axis wasn't found
             if (end-init)<=0:
                 return False
+    def getClone(self, mutate=False):
+        brain = self.brain.getClone()
+        if(mutate):
+            brain.mutate()
+        return Dino(self.master, self.canvas, brain)

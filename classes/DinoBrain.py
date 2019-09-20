@@ -13,7 +13,7 @@ class DinoBrain:
         self.W = W
         self.B = B
     def takeAction(self, X):
-        Z = np.matmul(X, W) + (B)
+        Z = np.matmul(X, self.W) + (self.B)
 
         with np.nditer(Z, op_flags=['readwrite']) as it:
             for item in it:
@@ -24,3 +24,8 @@ class DinoBrain:
             self.jumpAction(None)
         else:
             self.bendAction(None)
+    # mutate the brain params with random noise
+    def mutate(self):
+        pass
+    def getClone(self):
+        return DinoBrain(self.jumpAction, self.bendAction, W=np.array(self.W), B=np.array(self.B))
