@@ -13,15 +13,19 @@ class ColisionMonitor:
         self.onCollid = onCollid
     def start(self):
         self.verify_colisions()
-        self.canvas.after(1, self.start)
+        self.canvas.after(10, self.start)
     def verify_colisions(self):
         """
         TODO: verify colision only with the nearest obstacle
         """
-        for element in self.elements:
+        for i, element in enumerate(self.elements):
             for obstacle in self.obstacles:
                 if(obstacle.onScreen and self.crash(element, obstacle)):
-                    self.stop_all()
+                    if(len(self.elements)>1):
+                        element.die()
+                        self.elements.pop(i)
+                    else:
+                        self.stop_all()
                     return True
     def crash(self, element, obstacle):
         el_info = element.getColisionInfo()

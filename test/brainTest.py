@@ -4,7 +4,7 @@ import numpy as np
 X = np.array([[100, 50, 10, 50]])
 
 #W = np.array([[1.1, 1.0], [1.5, -3.2], [0.1, 0.9], [0.2, 1.1]])
-np.random.seed(1)
+#np.random.seed(1)
 W = np.random.rand(4,2)
 print(W)
 #B = np.array([[7, -1]])
@@ -22,3 +22,7 @@ with np.nditer(Z, op_flags=['readwrite']) as it:
             print(item)
             item[...] = 0
 print(Z[0][1])
+print(np.random.uniform(-500, 500, (4,2)))
+print(np.random.uniform(-500, 500, (4,2)))
+print(np.random.uniform(-500, 500, (4,2)))
+print(np.random.uniform(-500, 500, (4,2)))

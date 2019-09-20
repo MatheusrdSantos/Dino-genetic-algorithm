@@ -52,6 +52,17 @@ class Dino:
         keyboard.on_press_key('down', self.down)
         self.animate()
         self.run()
+    def die(self):
+        if(self.moving_id):
+            self.canvas.after_cancel(self.moving_id)
+        if(self.moving_bent_id):
+            self.canvas.after_cancel(self.moving_bent_id)
+        self.onScreen = False
+        self.quitAnimation()
+    def quitAnimation(self):
+        if(self.getBox()[0]>-50):
+            self.move(-9)
+            self.canvas.after(20, self.quitAnimation)
     def animate(self):
         if(not self.moving):
             if(not self.bent):

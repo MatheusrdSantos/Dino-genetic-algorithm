@@ -79,18 +79,23 @@ class GameController:
         self.colisionMonitor.start()
     # create train elements
     def prepareTrain(self):
-        self.dinos.append(Dino(self.master, self.canvas, DinoBrain(), self.game_params, mode=self.mode))
-        self.dinos.append(Dino(self.master, self.canvas, DinoBrain(), self.game_params, mode=self.mode))
-        self.dinos.append(Dino(self.master, self.canvas, DinoBrain(), self.game_params, mode=self.mode))
-        self.dinos.append(Dino(self.master, self.canvas, DinoBrain(), self.game_params, mode=self.mode))
-        self.dinos.append(Dino(self.master, self.canvas, DinoBrain(), self.game_params, mode=self.mode))
-        self.dinos.append(Dino(self.master, self.canvas, DinoBrain(), self.game_params, mode=self.mode))
+        for i in range(20):
+            self.dinos.append(Dino(self.master, self.canvas, DinoBrain(), self.game_params, mode=self.mode))
         self.obstacleGenerator = ObstacleGenerator(self.master, self.canvas, self.updateGameParams)
         self.obstacleGenerator.run()
         self.colisionMonitor = ColisionMonitor(self.master, self.canvas, self.stopGround, self.dinos, self.obstacleGenerator.obstacles)
         self.colisionMonitor.start()
     def stopGround(self):
+        print("New gen")
         self.canvas.after_cancel(self.ground_animation_id)
+        self.dinos[0].die()
+        for i in range(5):
+            self.dinos.append(Dino(self.master, self.canvas, self.dinos[0].brain.getClone(True), self.game_params, mode=self.mode))
+        self.dinos.pop(0)
+        self.colisionMonitor.dinos = self.dinos
+        self.animateGround()
+        self.obstacleGenerator.reset()
+        self.obstacleGenerator.run()
     def restart(self, event):
         for dino in self.dinos:
             dino.reset()
