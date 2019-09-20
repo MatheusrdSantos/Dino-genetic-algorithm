@@ -17,6 +17,7 @@ class FlyingDino:
         self.move_factor = {'x': 900, 'y': self.height}
         # load image
         img_pil = Image.open("./assets/flying-dino.png")
+        self.width = img_pil.size[0]
         self.image = ImageTk.PhotoImage(img_pil)
         self.id = canvas.create_image(900, self.height, image=self.image, anchor=NW)
         #load mask
@@ -52,6 +53,9 @@ class FlyingDino:
         block_center_y = radius_block_y + block_coords[1]
         return {'radius_x': radius_block_x, 'radius_y': radius_block_y, 'coords': {'x': block_center_x, 'y': block_center_y}}
     
+    def getBox(self):
+         block_coords = self.canvas.bbox(self.id)
+         return block_coords
     def reset(self):
         self.move(900 - int(self.canvas.coords(self.id)[0]), 0)
         self.onScreen = False

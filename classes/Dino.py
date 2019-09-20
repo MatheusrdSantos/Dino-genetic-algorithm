@@ -8,9 +8,10 @@ from PIL import Image, ImageTk
 from classes.DinoBrain import DinoBrain
 import pickle
 import keyboard
+import numpy as np
 
 class Dino:
-    def __init__(self, master, canvas, brain, jump_height=100):
+    def __init__(self, master, canvas, brain, game_params,jump_height=100):
         self.master = master
         self.canvas = canvas
         self.jump_height = jump_height
@@ -22,6 +23,7 @@ class Dino:
         self.onScreen = False
         self.move_factor = {'x': 100, 'y': 650}
         self.brain = brain
+        self.game_params = game_params
         self.brain.jumpAction = self.jump_call
         self.brain.bendAction = self.down
         # load default image
@@ -48,7 +50,7 @@ class Dino:
         keyboard.on_release_key('down', self.raiseDino)
         keyboard.on_press_key('down', self.down)
         self.animate()
-
+        self.run()
     def animate(self):
         if(not self.moving):
             if(not self.bent):
@@ -56,9 +58,14 @@ class Dino:
             else:
                 self.canvas.after(200, self.changeBentImage)
     def run(self):
-        self.brain.takeAction(None)
+        self.brain.takeAction(self.prepareInput())
         self.canvas.after(10, self.run)
-
+    def prepareInput(self):
+        return np.array([[
+            self.game_params['distance'],
+            self.game_params['width'],
+            self.game_params['height'],
+            self.game_params['speed']]])
     def changeRaiseImage(self):
         if(not self.bent):
             self.current_pil_running_index+=1
@@ -140,6 +147,10 @@ class Dino:
         block_center_y = radius_block_y + block_coords[1]
 
         return {'radius_x': radius_block_x, 'radius_y': radius_block_y, 'coords': {'x': block_center_x, 'y': block_center_y}}
+
+    def getBox(self):
+         block_coords = self.canvas.bbox(self.id)
+         return block_coords
 
     def reset(self):
         self.moving = 0

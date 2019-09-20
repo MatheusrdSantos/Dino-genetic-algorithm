@@ -23,6 +23,7 @@ class GameController:
         self.obstacles = []
         self.colisionMonitor = None
         self.obstacleGenerator = None
+        self.game_params = {'distance': 0, 'speed': 20, 'height': 0, 'width': 0}
         self.master.bind('<r>', self.restart)
         self.imgs_pil_ground = [
             Image.open("./assets/ground.png"),
@@ -53,10 +54,20 @@ class GameController:
             self.prepareGame()
             self.animateGround()
             mainloop()
+    def updateGameParams(self, distance=None, speed=None, height=None, width=None):
+        if(distance):
+           self.game_params['distance'] = distance 
+        if(speed):
+           self.game_params['speed'] = speed 
+        if(height):
+           self.game_params['height'] = height 
+        if(width):
+           self.game_params['width'] = width 
+        
     # create game elements
     def prepareGame(self):
-        self.dinos.append(Dino(self.master, self.canvas, DinoBrain()))
-        self.obstacleGenerator = ObstacleGenerator(self.master, self.canvas)
+        self.dinos.append(Dino(self.master, self.canvas, DinoBrain(), self.game_params))
+        self.obstacleGenerator = ObstacleGenerator(self.master, self.canvas, self.updateGameParams)
         self.obstacleGenerator.run()
         self.colisionMonitor = ColisionMonitor(self.master, self.canvas, self.stopGround, self.dinos, self.obstacleGenerator.obstacles)
         self.colisionMonitor.start()
