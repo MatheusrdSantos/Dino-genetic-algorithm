@@ -10,6 +10,7 @@ from classes.Cactus import Cactus
 from classes.FlyingDino import FlyingDino
 from classes.CollisionMonitor import ColisionMonitor
 from classes.ObstacleGenerator import ObstacleGenerator
+from classes.DinoBrain import DinoBrain
 
 class GameController:
     def __init__(self, mode):
@@ -54,7 +55,7 @@ class GameController:
             mainloop()
     # create game elements
     def prepareGame(self):
-        self.dinos.append(Dino(self.master, self.canvas))
+        self.dinos.append(Dino(self.master, self.canvas, DinoBrain()))
         self.obstacleGenerator = ObstacleGenerator(self.master, self.canvas)
         self.obstacleGenerator.run()
         self.colisionMonitor = ColisionMonitor(self.master, self.canvas, self.stopGround, self.dinos, self.obstacleGenerator.obstacles)

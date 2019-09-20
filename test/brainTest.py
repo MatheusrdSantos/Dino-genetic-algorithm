@@ -21,4 +21,4 @@ with np.nditer(Z, op_flags=['readwrite']) as it:
         if(item<0):
             print(item)
             item[...] = 0
-print(Z)
+print(Z[0][1])

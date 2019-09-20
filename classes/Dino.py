@@ -5,11 +5,12 @@ The Dino can jump or bend in order to avoid the obstacles.
 """
 from tkinter import NW
 from PIL import Image, ImageTk
+from classes.DinoBrain import DinoBrain
 import pickle
 import keyboard
 
 class Dino:
-    def __init__(self, master, canvas, jump_height=100):
+    def __init__(self, master, canvas, brain, jump_height=100):
         self.master = master
         self.canvas = canvas
         self.jump_height = jump_height
@@ -20,6 +21,9 @@ class Dino:
         self.moving_bent_id = None
         self.onScreen = False
         self.move_factor = {'x': 100, 'y': 650}
+        self.brain = brain
+        self.brain.jumpAction = self.jump_call
+        self.brain.bendAction = self.down
         # load default image
         self.imgs_pil_bent_running = [
             Image.open("./assets/dino-down.png"),
