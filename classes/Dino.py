@@ -63,7 +63,7 @@ class Dino:
             self.brain.takeAction(self.prepareInput())
         self.canvas.after(10, self.run)
     def prepareInput(self):
-        print(self.game_params)
+        #print(self.game_params)
         return np.array([[
             self.game_params['distance'],
             self.game_params['width'],

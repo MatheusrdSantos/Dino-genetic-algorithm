@@ -80,6 +80,11 @@ class GameController:
     # create train elements
     def prepareTrain(self):
         self.dinos.append(Dino(self.master, self.canvas, DinoBrain(), self.game_params, mode=self.mode))
+        self.dinos.append(Dino(self.master, self.canvas, DinoBrain(), self.game_params, mode=self.mode))
+        self.dinos.append(Dino(self.master, self.canvas, DinoBrain(), self.game_params, mode=self.mode))
+        self.dinos.append(Dino(self.master, self.canvas, DinoBrain(), self.game_params, mode=self.mode))
+        self.dinos.append(Dino(self.master, self.canvas, DinoBrain(), self.game_params, mode=self.mode))
+        self.dinos.append(Dino(self.master, self.canvas, DinoBrain(), self.game_params, mode=self.mode))
         self.obstacleGenerator = ObstacleGenerator(self.master, self.canvas, self.updateGameParams)
         self.obstacleGenerator.run()
         self.colisionMonitor = ColisionMonitor(self.master, self.canvas, self.stopGround, self.dinos, self.obstacleGenerator.obstacles)
