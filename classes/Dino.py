@@ -71,6 +71,11 @@ class Dino:
     def jump_call(self, event):
         if(not self.moving):
             self.moving = True
+            
+            """ self.current_pil_running_index = 0
+            self.image = ImageTk.PhotoImage(self.imgs_pil_running[self.current_pil_running_index])
+            self.canvas.itemconfig(self.id, image = self.image) """
+
             self.jump(event)
     def jump(self, event):
         if(self.distance<self.jump_height):

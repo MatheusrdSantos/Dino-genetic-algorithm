@@ -29,9 +29,9 @@ class GameController:
         self.ground = ImageTk.PhotoImage(self.imgs_pil_ground[0])
         self.ground_1 = ImageTk.PhotoImage(self.imgs_pil_ground[1])
         # display image on canvas
-        self.ground_id = self.canvas.create_image(0, 700, image=self.ground, anchor=NW)
-        self.ground_id_1 = self.canvas.create_image(400, 700, image=self.ground_1, anchor=NW)
-        self.ground_id_2 = self.canvas.create_image(800, 700, image=self.ground, anchor=NW)
+        self.ground_id = self.canvas.create_image(0, 695, image=self.ground, anchor=NW)
+        self.ground_id_1 = self.canvas.create_image(400, 695, image=self.ground_1, anchor=NW)
+        self.ground_id_2 = self.canvas.create_image(800, 695, image=self.ground, anchor=NW)
         self.ground_animation_id = None
     def animateGround(self):
         self.canvas.move(self.ground_id, -9, 0)
