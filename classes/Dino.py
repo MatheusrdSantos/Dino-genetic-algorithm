@@ -65,7 +65,7 @@ class Dino:
             self.canvas.after(20, self.quitAnimation)
         else:
             self.onScreen = False
-            print("deleted")
+            #print("deleted")
             self.canvas.delete(self.id)
     def animate(self):
         if(not self.moving):
@@ -75,7 +75,7 @@ class Dino:
                 self.canvas.after(200, self.changeBentImage)
     def run(self):
         if(self.mode == "train" and self.onScreen):
-            print(self.game_params)
+            #print(self.game_params)
             self.brain.takeAction(self.prepareInput())
         self.canvas.after(10, self.run)
     def prepareInput(self):

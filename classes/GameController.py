@@ -61,14 +61,15 @@ class GameController:
             mainloop()
 
     def updateGameParams(self, distance=None, speed=None, height=None, width=None):
-        if(distance):
+        if(not distance is None):
            self.game_params['distance'] = distance 
-        if(speed):
+        if(not speed is None):
            self.game_params['speed'] = speed 
-        if(height):
+        if(not height is None):
            self.game_params['height'] = height 
-        if(width):
-           self.game_params['width'] = width 
+        if(not width is None):
+           self.game_params['width'] = width
+        print(self.game_params)
         
     # create game elements
     def prepareGame(self):
@@ -79,7 +80,7 @@ class GameController:
         self.colisionMonitor.start()
     # create train elements
     def prepareTrain(self):
-        for i in range(1):
+        for i in range(5):
             self.dinos.append(Dino(self.master, self.canvas, DinoBrain(), self.game_params, mode=self.mode))
         self.obstacleGenerator = ObstacleGenerator(self.master, self.canvas, self.updateGameParams)
         self.obstacleGenerator.run()
@@ -89,8 +90,8 @@ class GameController:
         print("New gen")
         self.canvas.after_cancel(self.ground_animation_id)
         self.dinos[0].die()
-        #self.dinos.append(Dino(self.master, self.canvas, self.dinos[0].brain.getClone(), self.game_params, mode=self.mode))
-        for i in range(1):
+        self.dinos.append(Dino(self.master, self.canvas, self.dinos[0].brain.getClone(), self.game_params, mode=self.mode))
+        for i in range(4):
             self.dinos.append(Dino(self.master, self.canvas, self.dinos[0].brain.getClone(True), self.game_params, mode=self.mode))
         self.dinos.pop(0)
         self.colisionMonitor.dinos = self.dinos
@@ -100,6 +101,7 @@ class GameController:
     def restart(self, event):
         for dino in self.dinos:
             dino.reset()
+        self.game_params = {'distance': 100, 'speed': 20, 'height': 0, 'width': 50}
         self.animateGround()
         self.obstacleGenerator.reset()
         self.obstacleGenerator.run()

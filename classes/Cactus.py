@@ -8,13 +8,15 @@ from PIL import Image, ImageTk
 import pickle
 
 class Cactus:
-    def __init__(self, master, canvas, kind = 3, onScreenOut = lambda x=None: x):
+    def __init__(self, master, canvas, onCollidChange,kind = 3, onScreenOut = lambda x=None: x):
         self.master = master
         self.canvas = canvas
         self.moving_id = None
         self.onScreenOut = onScreenOut
         self.onScreen = False
         self.height = 0
+        self.onCollidChange = onCollidChange
+        self.canCollid = False
         if(kind == 3):
             img_pil = Image.open("./assets/obstacle-3x.png")
             self.mask = pickle.load( open( "./data/mask/obstacle_3_mask", "rb" ) )
@@ -37,6 +39,9 @@ class Cactus:
             self.onScreen = False
             self.onScreenOut()
         else:
+            if(self.canvas.coords(self.id)[0]<50 and self.canCollid):
+                self.canCollid = False
+                self.onCollidChange()
             self.onScreen = True
             self.move(-9, 0)
             self.moving_id = self.canvas.after(20, self.draw)
@@ -65,3 +70,4 @@ class Cactus:
     def reset(self):
         self.move(810 - int(self.canvas.coords(self.id)[0]), 0)
         self.onScreen = False
+        self.canCollid = False

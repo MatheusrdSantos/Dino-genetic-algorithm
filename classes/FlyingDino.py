@@ -7,7 +7,7 @@ from tkinter import NW
 from PIL import Image, ImageTk
 import pickle
 class FlyingDino:
-    def __init__(self, master, canvas, onScreenOut = lambda x=None: x, height=570):
+    def __init__(self, master, canvas, onCollidChange, onScreenOut = lambda x=None: x, height=570):
         self.canvas = canvas
         self.master = master
         self.moving_id = None
@@ -16,6 +16,8 @@ class FlyingDino:
         self.height = abs(height-650)
         self.obj_height = height
         self.move_factor = {'x': 900, 'y': self.obj_height}
+        self.onCollidChange = onCollidChange
+        self.canCollid = False
         # load image
         img_pil = Image.open("./assets/flying-dino.png")
         self.width = img_pil.size[0]
@@ -30,6 +32,9 @@ class FlyingDino:
             self.onScreen = False
             self.onScreenOut()
         else:
+            if(self.canvas.coords(self.id)[0]<50 and self.canCollid):
+                self.canCollid = False
+                self.onCollidChange()
             self.onScreen = True
             self.move(-9, 0)
             self.moving_id = self.canvas.after(20, self.draw)
@@ -60,3 +65,4 @@ class FlyingDino:
     def reset(self):
         self.move(900 - int(self.canvas.coords(self.id)[0]), 0)
         self.onScreen = False
+        self.canCollid = False
