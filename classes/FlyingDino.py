@@ -13,13 +13,14 @@ class FlyingDino:
         self.moving_id = None
         self.onScreen = False
         self.onScreenOut = onScreenOut
-        self.height = height
-        self.move_factor = {'x': 900, 'y': self.height}
+        self.height = abs(height-650)
+        self.obj_height = height
+        self.move_factor = {'x': 900, 'y': self.obj_height}
         # load image
         img_pil = Image.open("./assets/flying-dino.png")
         self.width = img_pil.size[0]
         self.image = ImageTk.PhotoImage(img_pil)
-        self.id = canvas.create_image(900, self.height, image=self.image, anchor=NW)
+        self.id = canvas.create_image(900, self.obj_height, image=self.image, anchor=NW)
         #load mask
         self.mask = pickle.load( open( "./data/mask/flying_dino_mask", "rb" ) )
 

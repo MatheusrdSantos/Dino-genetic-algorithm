@@ -20,7 +20,7 @@ class Dino:
         self.distance = 0
         self.moving_id = None
         self.moving_bent_id = None
-        self.onScreen = False
+        self.onScreen = True
         self.move_factor = {'x': 100, 'y': 650}
         self.brain = brain
         self.game_params = game_params
@@ -63,6 +63,10 @@ class Dino:
         if(self.getBox()[0]>-50):
             self.move(-9)
             self.canvas.after(20, self.quitAnimation)
+        else:
+            self.onScreen = False
+            print("deleted")
+            self.canvas.delete(self.id)
     def animate(self):
         if(not self.moving):
             if(not self.bent):
@@ -70,7 +74,8 @@ class Dino:
             else:
                 self.canvas.after(200, self.changeBentImage)
     def run(self):
-        if(self.mode == "train"):
+        if(self.mode == "train" and self.onScreen):
+            print(self.game_params)
             self.brain.takeAction(self.prepareInput())
         self.canvas.after(10, self.run)
     def prepareInput(self):
