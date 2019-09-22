@@ -11,15 +11,17 @@ from classes.FlyingDino import FlyingDino
 from classes.CollisionMonitor import ColisionMonitor
 from classes.ObstacleGenerator import ObstacleGenerator
 from classes.DinoBrain import DinoBrain
+import sys
 
 class GameController:
     def __init__(self, mode):
         #can be either a train or a game
         self.mode = mode
         self.master = Tk()
-        self.canvas = Canvas(self.master, width=800, height=800, bg='#eee')
+        self.canvas = Canvas(self.master, width=800, height=800, bg='#fff')
         self.colisionMonitor = ColisionMonitor(self.master, self.canvas, self.stopGround)
         self.dinos = []
+        self.dinosOnScreen = 0
         self.obstacles = []
         self.colisionMonitor = None
         self.obstacleGenerator = None
@@ -59,6 +61,9 @@ class GameController:
             self.prepareTrain()
             self.animateGround()
             mainloop()
+    def decreaseDinos(self):
+        self.dinosOnScreen-=1
+        self.colisionMonitor.dinosOnScreen = self.dinosOnScreen
 
     def updateGameParams(self, distance=None, speed=None, height=None, width=None):
         if(not distance is None):
@@ -69,34 +74,52 @@ class GameController:
            self.game_params['height'] = height 
         if(not width is None):
            self.game_params['width'] = width
-        print(self.game_params)
+        #print(self.game_params)
         
     # create game elements
     def prepareGame(self):
-        self.dinos.append(Dino(self.master, self.canvas, DinoBrain(), self.game_params))
+        self.dinos.append(Dino(self.master, self.canvas, DinoBrain(), self.game_params, self.decreaseDinos))
         self.obstacleGenerator = ObstacleGenerator(self.master, self.canvas, self.updateGameParams)
         self.obstacleGenerator.run()
         self.colisionMonitor = ColisionMonitor(self.master, self.canvas, self.stopGround, self.dinos, self.obstacleGenerator.obstacles)
         self.colisionMonitor.start()
     # create train elements
     def prepareTrain(self):
-        for i in range(5):
-            self.dinos.append(Dino(self.master, self.canvas, DinoBrain(), self.game_params, mode=self.mode))
+        for i in range(10):
+            self.dinosOnScreen+=1
+            self.dinos.append(Dino(self.master, self.canvas, DinoBrain(), self.game_params, self.decreaseDinos, mode=self.mode))
         self.obstacleGenerator = ObstacleGenerator(self.master, self.canvas, self.updateGameParams)
         self.obstacleGenerator.run()
-        self.colisionMonitor = ColisionMonitor(self.master, self.canvas, self.stopGround, self.dinos, self.obstacleGenerator.obstacles)
-        self.colisionMonitor.start()
+        self.colisionMonitor = ColisionMonitor(self.master, self.canvas, self.stopGround, self.dinos, self.obstacleGenerator.obstacles, self.dinosOnScreen)
+        self.colisionMonitor.run()
     def stopGround(self):
         print("New gen")
+        self.game_params = {'distance': 100, 'speed': 20, 'height': 0, 'width': 50}
         self.canvas.after_cancel(self.ground_animation_id)
-        self.dinos[0].die()
-        self.dinos.append(Dino(self.master, self.canvas, self.dinos[0].brain.getClone(), self.game_params, mode=self.mode))
-        for i in range(4):
-            self.dinos.append(Dino(self.master, self.canvas, self.dinos[0].brain.getClone(True), self.game_params, mode=self.mode))
-        self.dinos.pop(0)
-        self.colisionMonitor.dinos = self.dinos
-        self.animateGround()
+        brain_index = None
+        for i, dino in enumerate(self.dinos):
+            if(dino.best):
+                brain_index = i
+                print("best: ", brain_index)
+        #self.dinos.append(Dino(self.master, self.canvas, self.dinos[0].brain.getClone(), self.game_params, mode=self.mode))
+        #self.dinos[0].die()
+        """ for i in range(9):
+            self.dinos.append(Dino(self.master, self.canvas, self.dinos[0].brain.getClone(True), self.game_params, mode=self.mode)) """
         self.obstacleGenerator.reset()
+        for  i, dino in enumerate(self.dinos):
+            dino.reset()
+            #print("reset",i)
+            if(i != brain_index):
+                dino.setBrain(self.dinos[brain_index].brain.getClone(True))
+         
+        for  i, dino in enumerate(self.dinos):
+            dino.game_params = self.game_params
+            dino.animate()
+            dino.run()
+        self.dinosOnScreen = len(self.dinos)
+        self.colisionMonitor.dinosOnScreen = self.dinosOnScreen
+        self.animateGround()
+        self.colisionMonitor.run()
         self.obstacleGenerator.run()
     def restart(self, event):
         for dino in self.dinos:

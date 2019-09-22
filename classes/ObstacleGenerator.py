@@ -57,7 +57,7 @@ class ObstacleGenerator:
     def updateFirstObstacle(self):
         self.obstaclesIndexQueue.pop(0)
         self.firstObstacle = self.obstaclesIndexQueue[0]
-        print(self.obstaclesIndexQueue)
+        #print(self.obstaclesIndexQueue)
     def reset(self):
         for obstacle in self.obstacles:
             obstacle.reset()

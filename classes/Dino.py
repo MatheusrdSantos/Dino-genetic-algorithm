@@ -11,7 +11,7 @@ import keyboard
 import numpy as np
 
 class Dino:
-    def __init__(self, master, canvas, brain, game_params,jump_height=100, mode="game"):
+    def __init__(self, master, canvas, brain, game_params, decreaseDinos,jump_height=100, mode="game"):
         self.master = master
         self.canvas = canvas
         self.jump_height = jump_height
@@ -20,13 +20,18 @@ class Dino:
         self.distance = 0
         self.moving_id = None
         self.moving_bent_id = None
+        self.die_id = None
         self.onScreen = True
+        self.run_id = None
+        self.animation_raise_id  = None
         self.move_factor = {'x': 100, 'y': 650}
         self.brain = brain
         self.game_params = game_params
         self.brain.jumpAction = self.jump_brain_call
         self.brain.bendAction = self.down
+        self.decreaseDinos = decreaseDinos
         self.mode = mode
+        self.best = False
         # load default image
         self.imgs_pil_bent_running = [
             Image.open("./assets/dino-down.png"),
@@ -46,38 +51,50 @@ class Dino:
         self.mask_bent = pickle.load( open( "./data/mask/dino_down_mask", "rb" ) )
         self.mask_default = pickle.load( open( "./data/mask/dino_mask", "rb" ) )
         self.mask = self.mask_default
-        self.master.bind('<Up>', self.jump_call)
+        #self.master.bind('<Up>', self.jump_call)
         # keyboard events
-        keyboard.on_release_key('down', self.raiseDino)
-        keyboard.on_press_key('down', self.down)
+        #keyboard.on_release_key('down', self.raiseDino)
+        #keyboard.on_press_key('down', self.down)
         self.animate()
         self.run()
+    def __del__(self):
+        print("deleted")
+        """ self.canvas.after_cancel(self.quitAnimation)
+        self.canvas.after_cancel(self.moving_bent_id)
+        self.canvas.after_cancel(self.moving_id)
+        self.canvas.delete(self.id) """
+    def setBrain(self, brain):
+        self.brain = brain
+        self.brain.jumpAction = self.jump_brain_call
+        self.brain.bendAction = self.down
     def die(self):
+        self.decreaseDinos()
         if(self.moving_id):
             self.canvas.after_cancel(self.moving_id)
         if(self.moving_bent_id):
             self.canvas.after_cancel(self.moving_bent_id)
+        if(self.animation_raise_id):
+            self.canvas.after_cancel(self.animation_raise_id)
         self.onScreen = False
         self.quitAnimation()
     def quitAnimation(self):
         if(self.getBox()[0]>-50):
             self.move(-9)
-            self.canvas.after(20, self.quitAnimation)
+            self.die_id = self.canvas.after(20, self.quitAnimation)
         else:
             self.onScreen = False
             #print("deleted")
-            self.canvas.delete(self.id)
     def animate(self):
         if(not self.moving):
             if(not self.bent):
-                self.canvas.after(130, self.changeRaiseImage)
+                self.animation_raise_id = self.canvas.after(130, self.changeRaiseImage)
             else:
-                self.canvas.after(200, self.changeBentImage)
+                self.moving_bent_id = self.canvas.after(200, self.changeBentImage)
     def run(self):
         if(self.mode == "train" and self.onScreen):
             #print(self.game_params)
             self.brain.takeAction(self.prepareInput())
-        self.canvas.after(10, self.run)
+        self.run_id = self.canvas.after(10, self.run)
     def prepareInput(self):
         #print(self.game_params)
         return np.array([[
@@ -174,10 +191,27 @@ class Dino:
          return block_coords
 
     def reset(self):
-        self.moving = 0
+        if(self.run_id):
+            self.canvas.after_cancel(self.run_id)
+        if(self.moving_bent_id):
+            self.canvas.after_cancel(self.moving_bent_id)
+        if(self.moving_id):
+            self.canvas.after_cancel(self.moving_id)
+        if(self.die_id):
+            self.canvas.after_cancel(self.die_id)
+        if(self.animation_raise_id):
+            self.canvas.after_cancel(self.animation_raise_id)
+        self.canvas.delete(self.id)
+        self.image = ImageTk.PhotoImage(self.imgs_pil_running[0])
+        self.id = self.canvas.create_image(100, 650, image=self.image, anchor=NW)
+        self.mask = self.mask_default
+        self.move_factor = {'x': 100, 'y': 650}
+        self.bent = False
+        self.best = False
+        self.moving = False
         self.distance = 0
-        coords = self.canvas.coords(self.id)
-        self.move(0, 650-int(coords[1]))
+        #coords = self.canvas.coords(self.id)
+        self.onScreen = True
 
     def pixelInMask(self, pixel, move_factor):
         image_length = len(self.mask)
