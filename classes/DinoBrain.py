@@ -37,12 +37,14 @@ class DinoBrain:
             self.bendAction(None)
     # mutate the brain params with random noise
     def mutate(self):
-        self.W += np.random.uniform(-50, 50, (4,2))
-        self.B += np.random.uniform(-100, 100, (1,2))
+        self.W += np.random.uniform(-500, 500, (4,2))
+        self.B += np.random.uniform(-500, 500, (1,2))
     def getClone(self, mutate=False):
         brain = DinoBrain(self.jumpAction, self.bendAction, W=np.array(self.W), B=np.array(self.B))
         if(mutate):
             brain.mutate()
+        print(brain.W)
+        print(brain.B)
         """ print('-----')
         print(brain.W)
         print(brain.B)

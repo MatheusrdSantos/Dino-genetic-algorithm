@@ -85,7 +85,7 @@ class GameController:
         self.colisionMonitor.start()
     # create train elements
     def prepareTrain(self):
-        for i in range(10):
+        for i in range(2):
             self.dinosOnScreen+=1
             self.dinos.append(Dino(self.master, self.canvas, DinoBrain(), self.game_params, self.decreaseDinos, mode=self.mode))
         self.obstacleGenerator = ObstacleGenerator(self.master, self.canvas, self.updateGameParams)
