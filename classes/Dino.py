@@ -94,7 +94,7 @@ class Dino:
         if(self.mode == "train" and self.onScreen):
             #print(self.game_params)
             self.brain.takeAction(self.prepareInput())
-        self.run_id = self.canvas.after(10, self.run)
+        self.run_id = self.canvas.after(5, self.run)
     def prepareInput(self):
         #print(self.game_params)
         return np.array([[
@@ -151,6 +151,8 @@ class Dino:
     def down(self, event):
         if(self.moving):
             self.distance = self.jump_height
+            self.distance+=1
+            self.move(0, 2)
         else:
             if(not self.bent):
                 self.mask = self.mask_bent

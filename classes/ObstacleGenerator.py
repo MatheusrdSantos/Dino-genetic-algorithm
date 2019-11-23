@@ -7,7 +7,7 @@ import random
 from classes.Cactus import Cactus
 from classes.FlyingDino import FlyingDino
 class ObstacleGenerator:
-    def __init__(self, master, canvas, updateGameParams):
+    def __init__(self, master, canvas, updateGameParams, increaseScore):
         self.canvas = canvas
         self.obstaclesOnScreen = 0
         self.master = master
@@ -20,6 +20,7 @@ class ObstacleGenerator:
         self.lastOnScreenIndex = 0
         self.skipDistance = 0
         self.updateGameParams = updateGameParams
+        self.increaseScore = increaseScore
         self.obstaclesIndexQueue = []
         self.firstObstacle = None
     def run(self):
@@ -39,6 +40,7 @@ class ObstacleGenerator:
     def decraseObstaclesOnscreen(self):
         self.obstaclesOnScreen-=1
     def spawnObstacle(self):
+        self.increaseScore(1)
         avaliable_index = []
         count = 0
         for obstacle in self.obstacles:
@@ -48,7 +50,7 @@ class ObstacleGenerator:
         self.obstaclesOnScreen+=1
         obstacle_index = avaliable_index[random.randint(0, len(avaliable_index)-1)]
         self.lastOnScreenIndex = obstacle_index
-        self.skipDistance = random.randint(250, 400)
+        self.skipDistance = random.randint(270, 410)
         self.obstacles[obstacle_index].canCollid = True
         self.obstacles[obstacle_index].draw()
         if(self.obstaclesOnScreen==1):
@@ -58,6 +60,9 @@ class ObstacleGenerator:
         self.obstaclesIndexQueue.pop(0)
         self.firstObstacle = self.obstaclesIndexQueue[0]
         #print(self.obstaclesIndexQueue)
+    def updateObstaclesSpeed(self, speed):
+        for obstacle in obstacles:
+            obstacle.changeSpeed(speed)
     def reset(self):
         for obstacle in self.obstacles:
             obstacle.reset()

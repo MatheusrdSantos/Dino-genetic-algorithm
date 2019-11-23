@@ -18,6 +18,7 @@ class FlyingDino:
         self.move_factor = {'x': 900, 'y': self.obj_height}
         self.onCollidChange = onCollidChange
         self.canCollid = False
+        self.speed = 20
         # load image
         img_pil = Image.open("./assets/flying-dino.png")
         self.width = img_pil.size[0]
@@ -37,7 +38,7 @@ class FlyingDino:
                 self.onCollidChange()
             self.onScreen = True
             self.move(-9, 0)
-            self.moving_id = self.canvas.after(20, self.draw)
+            self.moving_id = self.canvas.after(self.speed, self.draw)
 
     def move(self, x=0, y=0):
         self.canvas.move(self.id, x, y)
@@ -62,6 +63,8 @@ class FlyingDino:
     def getBox(self):
          block_coords = self.canvas.bbox(self.id)
          return block_coords
+    def changeSpeed(self, speed):
+        self.speed = speed
     def reset(self):
         self.move(900 - int(self.canvas.coords(self.id)[0]), 0)
         self.onScreen = False
