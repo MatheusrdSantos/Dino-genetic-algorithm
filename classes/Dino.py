@@ -7,7 +7,7 @@ from tkinter import NW
 from PIL import Image, ImageTk
 from classes.DinoBrain import DinoBrain
 import pickle
-import keyboard
+#import keyboard
 import numpy as np
 
 class Dino:

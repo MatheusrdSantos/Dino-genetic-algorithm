@@ -43,8 +43,8 @@ class DinoBrain:
         brain = DinoBrain(self.jumpAction, self.bendAction, W=np.array(self.W), B=np.array(self.B))
         if(mutate):
             brain.mutate()
-        print(brain.W)
-        print(brain.B)
+        """ print(brain.W)
+        print(brain.B) """
         """ print('-----')
         print(brain.W)
         print(brain.B)

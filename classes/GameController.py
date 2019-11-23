@@ -2,7 +2,7 @@
 Author: Matheus Santos
 Description: this class manage the entire game state.
 """
-from tkinter import Canvas, Tk, mainloop, NW
+from tkinter import Canvas, Tk, mainloop, NW, Label
 from PIL import Image, ImageTk
 from classes.CollisionMonitor import ColisionMonitor
 from classes.Dino import Dino
@@ -25,6 +25,7 @@ class GameController:
         self.obstacles = []
         self.colisionMonitor = None
         self.obstacleGenerator = None
+        self.initialDinoNum = 10
         self.game_params = {'distance': 100, 'speed': 20, 'height': 0, 'width': 50}
         self.master.bind('<r>', self.restart)
         self.imgs_pil_ground = [
@@ -37,6 +38,15 @@ class GameController:
         self.ground_id_1 = self.canvas.create_image(400, 695, image=self.ground_1, anchor=NW)
         self.ground_id_2 = self.canvas.create_image(800, 695, image=self.ground, anchor=NW)
         self.ground_animation_id = None
+        self.interfaceObject = {}
+    def prepareInterface(self):
+        speedLabel = Label(self.master, text="Speed: "+str(self.game_params['speed']), bg='#fff')
+        speedLabel.pack()
+        self.interfaceObject['speedLabel'] = speedLabel
+
+        dinosAlive = Label(self.master, text="Dinos: "+str(self.initialDinoNum), bg='#fff')
+        dinosAlive.pack()
+        self.interfaceObject['dinosAlive'] = dinosAlive
     def animateGround(self):
         self.canvas.move(self.ground_id, -9, 0)
         self.canvas.move(self.ground_id_1, -9, 0)
@@ -57,6 +67,7 @@ class GameController:
             self.animateGround()
             mainloop()
         elif(self.mode == "train"):
+            self.prepareInterface()
             self.canvas.pack()
             self.prepareTrain()
             self.animateGround()
@@ -64,6 +75,7 @@ class GameController:
     def decreaseDinos(self):
         self.dinosOnScreen-=1
         self.colisionMonitor.dinosOnScreen = self.dinosOnScreen
+        self.interfaceObject['dinosAlive'].config(text="Dinos: "+str(self.dinosOnScreen))
 
     def updateGameParams(self, distance=None, speed=None, height=None, width=None):
         if(not distance is None):
@@ -85,7 +97,7 @@ class GameController:
         self.colisionMonitor.start()
     # create train elements
     def prepareTrain(self):
-        for i in range(2):
+        for i in range(self.initialDinoNum):
             self.dinosOnScreen+=1
             self.dinos.append(Dino(self.master, self.canvas, DinoBrain(), self.game_params, self.decreaseDinos, mode=self.mode))
         self.obstacleGenerator = ObstacleGenerator(self.master, self.canvas, self.updateGameParams)
