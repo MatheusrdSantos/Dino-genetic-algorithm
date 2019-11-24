@@ -94,7 +94,7 @@ class Dino:
         if(self.mode == "train" and self.onScreen):
             #print(self.game_params)
             self.brain.takeAction(self.prepareInput())
-        self.run_id = self.canvas.after(5, self.run)
+        self.run_id = self.canvas.after(2, self.run)
     def prepareInput(self):
         #print(self.game_params)
         return np.array([[

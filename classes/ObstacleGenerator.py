@@ -50,7 +50,7 @@ class ObstacleGenerator:
         self.obstaclesOnScreen+=1
         obstacle_index = avaliable_index[random.randint(0, len(avaliable_index)-1)]
         self.lastOnScreenIndex = obstacle_index
-        self.skipDistance = random.randint(270, 410)
+        self.skipDistance = random.randint(280, 410)
         self.obstacles[obstacle_index].canCollid = True
         self.obstacles[obstacle_index].draw()
         if(self.obstaclesOnScreen==1):

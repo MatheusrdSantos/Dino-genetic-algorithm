@@ -41,6 +41,7 @@ class GameController:
         self.ground_animation_id = None
         self.interfaceObject = {}
         self.score = 0
+        self.record = 0
     def prepareInterface(self):
         speedLabel = Label(self.master, text="Speed: "+str(self.game_params['speed']), bg='#fff')
         speedLabel.pack()
@@ -53,6 +54,10 @@ class GameController:
         scoreLabel = Label(self.master, text="Score: "+str(self.score), bg='#fff')
         scoreLabel.pack()
         self.interfaceObject['score'] = scoreLabel
+        
+        record = Label(self.master, text="Record: "+str(self.record), bg='#fff')
+        record.pack()
+        self.interfaceObject['record'] = record
     def animateGround(self):
         self.canvas.move(self.ground_id, -9, 0)
         self.canvas.move(self.ground_id_1, -9, 0)
@@ -94,9 +99,10 @@ class GameController:
            self.game_params['width'] = width
         #print(self.game_params)
     def updateLabels(self):
-        self.interfaceObject['speedLabel'].config(text="Speed: "+str(self.game_params['speed']))
+        self.interfaceObject['speedLabel'].config(text="Speed: "+str(25 - self.game_params['speed']))
         self.interfaceObject['dinosAlive'].config(text="Dinos: "+str(self.dinosOnScreen))
         self.interfaceObject['score'].config(text="Score: "+str(self.score))
+        self.interfaceObject['record'].config(text="Record: "+str(self.record))
     # create game elements
     def prepareGame(self):
         self.dinos.append(Dino(self.master, self.canvas, DinoBrain(), self.game_params, self.decreaseDinos))
@@ -122,6 +128,8 @@ class GameController:
         self.colisionMonitor.run()
     def stopGround(self):
         print("New gen")
+        if(self.record<self.score):
+            self.record = self.score
         self.resetGameParams()
         self.canvas.after_cancel(self.ground_animation_id)
         brain_index = None
