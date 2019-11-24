@@ -61,7 +61,7 @@ class ObstacleGenerator:
         self.firstObstacle = self.obstaclesIndexQueue[0]
         #print(self.obstaclesIndexQueue)
     def updateObstaclesSpeed(self, speed):
-        for obstacle in obstacles:
+        for obstacle in self.obstacles:
             obstacle.changeSpeed(speed)
     def reset(self):
         for obstacle in self.obstacles:

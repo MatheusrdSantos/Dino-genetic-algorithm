@@ -17,7 +17,7 @@ class Cactus:
         self.height = 0
         self.onCollidChange = onCollidChange
         self.canCollid = False
-        self.speed = 20
+        self.speed = 25
         if(kind == 3):
             img_pil = Image.open("./assets/obstacle-3x.png")
             self.mask = pickle.load( open( "./data/mask/obstacle_3_mask", "rb" ) )

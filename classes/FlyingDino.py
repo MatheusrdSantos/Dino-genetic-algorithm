@@ -18,7 +18,7 @@ class FlyingDino:
         self.move_factor = {'x': 900, 'y': self.obj_height}
         self.onCollidChange = onCollidChange
         self.canCollid = False
-        self.speed = 20
+        self.speed = 25
         # load image
         img_pil = Image.open("./assets/flying-dino.png")
         self.width = img_pil.size[0]

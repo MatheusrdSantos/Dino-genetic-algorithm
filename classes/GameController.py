@@ -26,8 +26,9 @@ class GameController:
         self.colisionMonitor = None
         self.obstacleGenerator = None
         self.initialDinoNum = 10
-        self.game_params = {'distance': 100, 'speed': 20, 'height': 0, 'width': 50}
+        self.game_params = {'distance': 100, 'speed': 25, 'height': 0, 'width': 50}
         self.master.bind('<r>', self.restart)
+        self.scoresCheckPoint = [5, 10, 15, 20, 25, 30, 40, 50, 80, 110, 200, 250]
         self.imgs_pil_ground = [
             Image.open("./assets/ground.png"),
             Image.open("./assets/ground-1.png")]
@@ -80,7 +81,7 @@ class GameController:
     def decreaseDinos(self):
         self.dinosOnScreen-=1
         self.colisionMonitor.dinosOnScreen = self.dinosOnScreen
-        self.interfaceObject['dinosAlive'].config(text="Dinos: "+str(self.dinosOnScreen))
+        self.updateLabels()
 
     def updateGameParams(self, distance=None, speed=None, height=None, width=None):
         if(not distance is None):
@@ -92,7 +93,10 @@ class GameController:
         if(not width is None):
            self.game_params['width'] = width
         #print(self.game_params)
-        
+    def updateLabels(self):
+        self.interfaceObject['speedLabel'].config(text="Speed: "+str(self.game_params['speed']))
+        self.interfaceObject['dinosAlive'].config(text="Dinos: "+str(self.dinosOnScreen))
+        self.interfaceObject['score'].config(text="Score: "+str(self.score))
     # create game elements
     def prepareGame(self):
         self.dinos.append(Dino(self.master, self.canvas, DinoBrain(), self.game_params, self.decreaseDinos))
@@ -106,26 +110,26 @@ class GameController:
             self.dinosOnScreen+=1
             self.dinos.append(Dino(self.master, self.canvas, DinoBrain(), self.game_params, self.decreaseDinos, mode=self.mode))
         self.obstacleGenerator = ObstacleGenerator(self.master, self.canvas, self.updateGameParams, self.increaseScore)
+        self.obstacleGenerator.updateObstaclesSpeed(self.game_params['speed'])
         self.obstacleGenerator.run()
         self.colisionMonitor = ColisionMonitor(self.master, self.canvas, self.stopGround, self.dinos, self.obstacleGenerator.obstacles, self.dinosOnScreen)
         self.colisionMonitor.run()
     def stopGround(self):
         print("New gen")
-        self.game_params = {'distance': 100, 'speed': 20, 'height': 0, 'width': 50}
+        self.resetGameParams()
         self.canvas.after_cancel(self.ground_animation_id)
         brain_index = None
         for i, dino in enumerate(self.dinos):
             if(dino.best):
                 brain_index = i
                 print("best: ", brain_index)
-        #self.dinos.append(Dino(self.master, self.canvas, self.dinos[0].brain.getClone(), self.game_params, mode=self.mode))
-        #self.dinos[0].die()
-        """ for i in range(9):
-            self.dinos.append(Dino(self.master, self.canvas, self.dinos[0].brain.getClone(True), self.game_params, mode=self.mode)) """
+        
+        self.obstacleGenerator.updateObstaclesSpeed(self.game_params['speed'])
         self.obstacleGenerator.reset()
+       
+        print(self.game_params)
         for  i, dino in enumerate(self.dinos):
             dino.reset()
-            #print("reset",i)
             if(i != brain_index):
                 dino.setBrain(self.dinos[brain_index].brain.getClone(True))
          
@@ -137,20 +141,23 @@ class GameController:
 
         self.dinosOnScreen = len(self.dinos)
         self.colisionMonitor.dinosOnScreen = self.dinosOnScreen
-        
-        self.interfaceObject['dinosAlive'].config(text="Dinos: "+str(self.dinosOnScreen))
-        self.interfaceObject['score'].config(text="Score: "+str(self.score))
 
+        self.updateLabels()
         self.animateGround()
         self.colisionMonitor.run()
         self.obstacleGenerator.run()
     def increaseScore(self, score):
         self.score+=score
-        self.interfaceObject['score'].config(text="Score: "+str(self.score))
+        if(self.score in self.scoresCheckPoint):
+            self.game_params['speed']-=1
+            self.obstacleGenerator.updateObstaclesSpeed(self.game_params['speed'])
+        self.updateLabels()
+    def resetGameParams(self):
+        self.game_params = {'distance': 100, 'speed': 25, 'height': 0, 'width': 50}
     def restart(self, event):
         for dino in self.dinos:
             dino.reset()
-        self.game_params = {'distance': 100, 'speed': 20, 'height': 0, 'width': 50}
+        self.resetGameParams()
         self.animateGround()
         self.obstacleGenerator.reset()
         self.obstacleGenerator.run()
