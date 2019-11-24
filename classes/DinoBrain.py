@@ -50,3 +50,13 @@ class DinoBrain:
         print(brain.B)
         print('*****') """
         return brain
+    def save(self):
+        np.save('data/brain/best_w.npy', self.W)
+        np.save('data/brain/best_b.npy', self.B)
+    def load(self):
+        try:
+            self.W = np.load('data/brain/best_w.npy')
+            self.B = np.load('data/brain/best_b.npy')
+        except IOError as err:
+            return False
+        return True

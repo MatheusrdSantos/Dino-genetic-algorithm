@@ -28,7 +28,7 @@ class GameController:
         self.initialDinoNum = 10
         self.game_params = {'distance': 100, 'speed': 25, 'height': 0, 'width': 50}
         self.master.bind('<r>', self.restart)
-        self.scoresCheckPoint = [5, 10, 15, 20, 25, 30, 40, 50, 80, 110, 200, 250]
+        self.scoresCheckPoint = [5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 80, 110]
         self.imgs_pil_ground = [
             Image.open("./assets/ground.png"),
             Image.open("./assets/ground-1.png")]
@@ -108,7 +108,13 @@ class GameController:
     def prepareTrain(self):
         for i in range(self.initialDinoNum):
             self.dinosOnScreen+=1
-            self.dinos.append(Dino(self.master, self.canvas, DinoBrain(), self.game_params, self.decreaseDinos, mode=self.mode))
+            dino = Dino(self.master, self.canvas, DinoBrain(), self.game_params, self.decreaseDinos, mode=self.mode)
+            dino.brain.load()
+            self.dinos.append(dino)
+
+        for dino in self.dinos[1:]:
+            dino.brain.mutate()
+
         self.obstacleGenerator = ObstacleGenerator(self.master, self.canvas, self.updateGameParams, self.increaseScore)
         self.obstacleGenerator.updateObstaclesSpeed(self.game_params['speed'])
         self.obstacleGenerator.run()
@@ -123,11 +129,11 @@ class GameController:
             if(dino.best):
                 brain_index = i
                 print("best: ", brain_index)
+                dino.brain.save()
         
         self.obstacleGenerator.updateObstaclesSpeed(self.game_params['speed'])
         self.obstacleGenerator.reset()
        
-        print(self.game_params)
         for  i, dino in enumerate(self.dinos):
             dino.reset()
             if(i != brain_index):
