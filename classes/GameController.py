@@ -165,6 +165,10 @@ class GameController:
         if(self.score in self.scoresCheckPoint):
             self.game_params['speed']-=1
             self.obstacleGenerator.updateObstaclesSpeed(self.game_params['speed'])
+        if(self.score==350):
+            for dino in self.dinos:
+                if(dino.onScreen):
+                    dino.brain.save()
         self.updateLabels()
     def resetGameParams(self):
         self.game_params = {'distance': 100, 'speed': 25, 'height': 0, 'width': 50}

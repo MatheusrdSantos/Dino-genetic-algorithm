@@ -97,11 +97,15 @@ class Dino:
         self.run_id = self.canvas.after(2, self.run)
     def prepareInput(self):
         #print(self.game_params)
-        return np.array([[
-            self.game_params['distance'],
-            self.game_params['width'],
-            self.game_params['height'],
-            self.game_params['speed']]])
+        return np.array([
+                [
+                    self.game_params['distance'],
+                    self.game_params['width'],
+                    self.game_params['height'],
+                    self.game_params['speed'],
+                    self.getYpos()
+                ]
+            ])
     def changeRaiseImage(self):
         if(not self.bent):
             self.current_pil_running_index+=1
@@ -131,10 +135,10 @@ class Dino:
             self.jump(event)
     def jump(self, event):
         if(self.distance<self.jump_height):
-            self.distance+=1
-            self.move(0, -1)
+            self.distance+=2
+            self.move(0, -2)
             self.moving_id = self.canvas.after(3, self.jump, event)
-        elif(self.distance>=self.jump_height and  self.canvas.coords(self.id)[-1]<650):
+        elif(self.distance>=self.jump_height and self.canvas.coords(self.id)[-1]<650):
             self.distance+=1
             self.move(0, 1)
             self.moving_id = self.canvas.after(3, self.jump, event)
@@ -142,7 +146,10 @@ class Dino:
             self.distance = 0
             self.moving = False
             self.animate()
-
+    def getYpos(self):
+        if(self.canvas.coords(self.id)[-1]):
+            return 700 - self.canvas.coords(self.id)[-1]
+        return 700
     def move(self, x=0, y=0):
         self.canvas.move(self.id, x, y)
         self.move_factor['x']+=x
