@@ -43,6 +43,7 @@ class GameController:
         self.interfaceObject = {}
         self.score = 0
         self.record = 0
+        self.n_generations = 0
 
     def prepareInterface(self):
         #l1.grid(row = 0, column = 0, sticky = W, pady = 2)
@@ -62,6 +63,10 @@ class GameController:
         record = Label(self.infoPanel, text="Record: "+str(self.record), bg='#fff')
         record.grid(row=0, column=1, padx=20, pady=10, sticky = W)
         self.interfaceObject['record'] = record
+        
+        n_generation = Label(self.infoPanel, text="Generation: "+str(self.n_generations), bg='#fff')
+        n_generation.grid(row=1, column=1, padx=20, pady=10, sticky = W)
+        self.interfaceObject['n_generation'] = n_generation
     def animateGround(self):
         self.canvas.move(self.ground_id, -9, 0)
         self.canvas.move(self.ground_id_1, -9, 0)
@@ -107,6 +112,7 @@ class GameController:
         self.interfaceObject['dinosAlive'].config(text="Dinos: "+str(self.dinosOnScreen)+"/"+str(self.initialDinoNum))
         self.interfaceObject['score'].config(text="Score: "+str(self.score))
         self.interfaceObject['record'].config(text="Record: "+str(self.record))
+        self.interfaceObject['n_generation'].config(text="Generation: "+str(self.n_generations))
     # create game elements
     def prepareGame(self):
         self.dinos.append(Dino(self.master, self.canvas, DinoBrain(), self.game_params, self.decreaseDinos))
@@ -132,6 +138,7 @@ class GameController:
         self.colisionMonitor.run()
     def stopGround(self):
         print("New gen")
+        self.n_generations+=1
         if(self.record<self.score):
             self.record = self.score
         self.resetGameParams()
