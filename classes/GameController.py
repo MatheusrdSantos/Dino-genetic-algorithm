@@ -2,7 +2,7 @@
 Author: Matheus Santos
 Description: this class manage the entire game state.
 """
-from tkinter import Canvas, Tk, mainloop, NW, Label
+from tkinter import Canvas, Tk, mainloop, NW, Label, Frame, W
 from PIL import Image, ImageTk
 from classes.CollisionMonitor import ColisionMonitor
 from classes.Dino import Dino
@@ -19,6 +19,7 @@ class GameController:
         self.mode = mode
         self.master = Tk()
         self.canvas = Canvas(self.master, width=800, height=800, bg='#fff')
+        self.infoPanel = Frame(self.master, bg='#fff')
         self.colisionMonitor = ColisionMonitor(self.master, self.canvas, self.stopGround)
         self.dinos = []
         self.dinosOnScreen = 0
@@ -28,7 +29,7 @@ class GameController:
         self.initialDinoNum = 10
         self.game_params = {'distance': 100, 'speed': 25, 'height': 0, 'width': 50}
         self.master.bind('<r>', self.restart)
-        self.scoresCheckPoint = [5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 80, 110]
+        self.scoresCheckPoint = [5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 80, 110, 140, 200, 250]
         self.imgs_pil_ground = [
             Image.open("./assets/ground.png"),
             Image.open("./assets/ground-1.png")]
@@ -42,21 +43,24 @@ class GameController:
         self.interfaceObject = {}
         self.score = 0
         self.record = 0
+
     def prepareInterface(self):
-        speedLabel = Label(self.master, text="Speed: "+str(self.game_params['speed']), bg='#fff')
-        speedLabel.pack()
+        #l1.grid(row = 0, column = 0, sticky = W, pady = 2)
+        self.infoPanel.pack(fill='x')
+        speedLabel = Label(self.infoPanel, text="Speed: "+str(self.game_params['speed'])+"/"+str(len(self.scoresCheckPoint)), bg='#fff')
+        speedLabel.grid(row=0, column=0, pady=10, sticky = W)
         self.interfaceObject['speedLabel'] = speedLabel
 
-        dinosAlive = Label(self.master, text="Dinos: "+str(self.initialDinoNum), bg='#fff')
-        dinosAlive.pack()
+        dinosAlive = Label(self.infoPanel, text="Dinos: "+str(self.initialDinoNum), bg='#fff')
+        dinosAlive.grid(row=1, column=0, pady=10, sticky = W)
         self.interfaceObject['dinosAlive'] = dinosAlive
         
-        scoreLabel = Label(self.master, text="Score: "+str(self.score), bg='#fff')
-        scoreLabel.pack()
+        scoreLabel = Label(self.infoPanel, text="Score: "+str(self.score), bg='#fff')
+        scoreLabel.grid(row=2, column=0, pady=10, sticky = W)
         self.interfaceObject['score'] = scoreLabel
         
-        record = Label(self.master, text="Record: "+str(self.record), bg='#fff')
-        record.pack()
+        record = Label(self.infoPanel, text="Record: "+str(self.record), bg='#fff')
+        record.grid(row=0, column=1, padx=20, pady=10, sticky = W)
         self.interfaceObject['record'] = record
     def animateGround(self):
         self.canvas.move(self.ground_id, -9, 0)
@@ -99,8 +103,8 @@ class GameController:
            self.game_params['width'] = width
         #print(self.game_params)
     def updateLabels(self):
-        self.interfaceObject['speedLabel'].config(text="Speed: "+str(25 - self.game_params['speed']))
-        self.interfaceObject['dinosAlive'].config(text="Dinos: "+str(self.dinosOnScreen))
+        self.interfaceObject['speedLabel'].config(text="Speed: "+str(25 - self.game_params['speed'])+"/"+str(len(self.scoresCheckPoint)))
+        self.interfaceObject['dinosAlive'].config(text="Dinos: "+str(self.dinosOnScreen)+"/"+str(self.initialDinoNum))
         self.interfaceObject['score'].config(text="Score: "+str(self.score))
         self.interfaceObject['record'].config(text="Record: "+str(self.record))
     # create game elements
