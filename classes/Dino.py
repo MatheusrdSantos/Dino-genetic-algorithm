@@ -11,7 +11,7 @@ import pickle
 import numpy as np
 
 class Dino:
-    def __init__(self, master, canvas, brain, game_params, decreaseDinos,jump_height=100, mode="game"):
+    def __init__(self, master, canvas, brain, game_params, decreaseDinos,jump_height=100, mode="game", game_modes={}):
         self.master = master
         self.canvas = canvas
         self.jump_height = jump_height
@@ -31,6 +31,7 @@ class Dino:
         self.brain.bendAction = self.down
         self.decreaseDinos = decreaseDinos
         self.mode = mode
+        self.game_modes = game_modes
         self.best = False
         # load default image
         self.imgs_pil_bent_running = [
@@ -91,7 +92,7 @@ class Dino:
             else:
                 self.moving_bent_id = self.canvas.after(200, self.changeBentImage)
     def run(self):
-        if(self.mode == "train" and self.onScreen):
+        if((self.mode == self.game_modes['train'] or self.mode == self.game_modes['simulation'])  and self.onScreen):
             #print(self.game_params)
             self.brain.takeAction(self.prepareInput())
         self.run_id = self.canvas.after(2, self.run)

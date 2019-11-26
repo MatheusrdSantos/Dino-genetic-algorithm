@@ -44,6 +44,11 @@ class GameController:
         self.score = 0
         self.record = 0
         self.n_generations = 0
+        self.game_modes =  {
+            "train": "train",
+            "game": "game",
+            "simulation": "simulation"
+        }
 
     def prepareInterface(self):
         #l1.grid(row = 0, column = 0, sticky = W, pady = 2)
@@ -81,15 +86,21 @@ class GameController:
         self.ground_animation_id = self.canvas.after(20, self.animateGround)
     
     def run(self):
-        if(self.mode == "game"):
+        if(self.mode == self.game_modes["game"]):
             self.canvas.pack()
             self.prepareGame()
             self.animateGround()
             mainloop()
-        elif(self.mode == "train"):
+        elif(self.mode == self.game_modes["train"]):
             self.prepareInterface()
             self.canvas.pack()
             self.prepareTrain()
+            self.animateGround()
+            mainloop()
+        elif(self.mode == self.game_modes["simulation"]):
+            self.prepareInterface()
+            self.canvas.pack()
+            self.prepareSimulation()
             self.animateGround()
             mainloop()
     def decreaseDinos(self):
@@ -124,12 +135,24 @@ class GameController:
     def prepareTrain(self):
         for i in range(self.initialDinoNum):
             self.dinosOnScreen+=1
-            dino = Dino(self.master, self.canvas, DinoBrain(), self.game_params, self.decreaseDinos, mode=self.mode)
+            dino = Dino(self.master, self.canvas, DinoBrain(), self.game_params, self.decreaseDinos, mode=self.mode, game_modes=self.game_modes)
             dino.brain.load()
             self.dinos.append(dino)
 
         for dino in self.dinos[1:]:
             dino.brain.mutate()
+
+        self.obstacleGenerator = ObstacleGenerator(self.master, self.canvas, self.updateGameParams, self.increaseScore)
+        self.obstacleGenerator.updateObstaclesSpeed(self.game_params['speed'])
+        self.obstacleGenerator.run()
+        self.colisionMonitor = ColisionMonitor(self.master, self.canvas, self.stopGround, self.dinos, self.obstacleGenerator.obstacles, self.dinosOnScreen)
+        self.colisionMonitor.run()
+    # create simulation elements
+    def prepareSimulation(self):
+        for i in range(self.initialDinoNum):
+            self.dinosOnScreen+=1
+            dino = Dino(self.master, self.canvas, DinoBrain(), self.game_params, self.decreaseDinos, mode=self.mode, game_modes=self.game_modes)
+            self.dinos.append(dino)
 
         self.obstacleGenerator = ObstacleGenerator(self.master, self.canvas, self.updateGameParams, self.increaseScore)
         self.obstacleGenerator.updateObstaclesSpeed(self.game_params['speed'])
@@ -148,7 +171,8 @@ class GameController:
             if(dino.best):
                 brain_index = i
                 print("best: ", brain_index)
-                dino.brain.save()
+                if(self.mode == "train"):
+                    dino.brain.save()
         
         self.obstacleGenerator.updateObstaclesSpeed(self.game_params['speed'])
         self.obstacleGenerator.reset()
@@ -176,7 +200,7 @@ class GameController:
         if(self.score in self.scoresCheckPoint):
             self.game_params['speed']-=1
             self.obstacleGenerator.updateObstaclesSpeed(self.game_params['speed'])
-        if(self.score==350):
+        if(self.score==350 and self.mode == self.game_modes['train']):
             for dino in self.dinos:
                 if(dino.onScreen):
                     dino.brain.save()
