@@ -102,6 +102,7 @@ class GameController:
     
     def run(self):
         if(self.mode == self.game_modes["game"]):
+            self.prepareInterface()
             self.canvas.pack()
             self.prepareGame()
             self.animateGround()
@@ -142,11 +143,15 @@ class GameController:
         self.interfaceObject['general_record'].config(text="General record: "+str(self.general_record))
     # create game elements
     def prepareGame(self):
-        self.dinos.append(Dino(self.master, self.canvas, DinoBrain(), self.game_params, self.decreaseDinos))
-        self.obstacleGenerator = ObstacleGenerator(self.master, self.canvas, self.updateGameParams)
+        self.dinos.append(Dino(self.master, self.canvas, DinoBrain(), self.game_params, self.decreaseDinos, mode=self.mode, game_modes=self.game_modes, color="black"))
+        self.dinos.append(Dino(self.master, self.canvas, DinoBrain(), self.game_params, self.decreaseDinos, mode="train", game_modes=self.game_modes, color="red"))
+        self.dinos[-1].brain.load()
+        self.dinosOnScreen = 2
+        self.obstacleGenerator = ObstacleGenerator(self.master, self.canvas, self.updateGameParams, self.increaseScore)
+        self.obstacleGenerator.updateObstaclesSpeed(self.game_params['speed'])
         self.obstacleGenerator.run()
-        self.colisionMonitor = ColisionMonitor(self.master, self.canvas, self.stopGround, self.dinos, self.obstacleGenerator.obstacles)
-        self.colisionMonitor.start()
+        self.colisionMonitor = ColisionMonitor(self.master, self.canvas, self.stopGround, self.dinos, self.obstacleGenerator.obstacles, self.dinosOnScreen)
+        self.colisionMonitor.run()
     # create train elements
     def prepareTrain(self):
         for i in range(self.initialDinoNum):

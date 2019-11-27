@@ -7,12 +7,11 @@ from tkinter import NW
 from PIL import Image, ImageTk
 from classes.DinoBrain import DinoBrain
 import pickle
-#import keyboard
 import numpy as np
 import random
 
 class Dino:
-    def __init__(self, master, canvas, brain, game_params, decreaseDinos,jump_height=100, mode="game", game_modes={}):
+    def __init__(self, master, canvas, brain, game_params, decreaseDinos,jump_height=100, mode="game", game_modes={}, color=None):
         self.master = master
         self.canvas = canvas
         self.jump_height = jump_height
@@ -34,7 +33,10 @@ class Dino:
         self.mode = mode
         self.game_modes = game_modes
         self.best = False
-        self.color = ['black', 'green', 'blue', 'red', 'yellow', 'orange'][random.randint(0, 5)]
+        if(color is None):
+            self.color = ['black', 'green', 'blue', 'red', 'yellow', 'orange'][random.randint(0, 5)]
+        else:
+            self.color = color
         # load default image
         self.imgs_pil_bent_running = [
             Image.open("./assets/dino-down-"+self.color+".png"),
@@ -54,18 +56,16 @@ class Dino:
         self.mask_bent = pickle.load( open( "./data/mask/dino_down_mask", "rb" ) )
         self.mask_default = pickle.load( open( "./data/mask/dino_mask", "rb" ) )
         self.mask = self.mask_default
-        #self.master.bind('<Up>', self.jump_call)
-        # keyboard events
-        #keyboard.on_release_key('down', self.raiseDino)
-        #keyboard.on_press_key('down', self.down)
+        if(self.mode == "game"):
+            import keyboard
+            self.master.bind('<Up>', self.jump_call)
+            # keyboard events
+            keyboard.on_release_key('down', self.raiseDino)
+            keyboard.on_press_key('down', self.down)
         self.animate()
         self.run()
-    def __del__(self):
-        print("deleted")
-        """ self.canvas.after_cancel(self.quitAnimation)
-        self.canvas.after_cancel(self.moving_bent_id)
-        self.canvas.after_cancel(self.moving_id)
-        self.canvas.delete(self.id) """
+    """ def __del__(self):
+        print("deleted") """
     def setBrain(self, brain):
         self.brain = brain
         self.brain.jumpAction = self.jump_brain_call
