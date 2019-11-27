@@ -1,6 +1,8 @@
 # Dino-genetic-algorithm
 This python project is a demonstration of what a genetic algorithm technique can achieve when applied in a game. The current game is the famous dinosaur game launched by google chrome.
 
+<img src="https://user-images.githubusercontent.com/42742621/69763661-a6b09b00-114c-11ea-9bc4-aabc040e652b.gif" width="600px">
+
 # python modules
 - keyboard
 - Tkinter
