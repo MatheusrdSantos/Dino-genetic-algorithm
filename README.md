@@ -21,7 +21,7 @@ You can run training mode through the following code:
 python3 main.py train
 ```
 
-The training mode uses a pre-trained set o dinos. After executing the above command the training will continue using the best dino of the last training.
+The training mode uses a pre-trained set of dinos. After executing the above command the training will continue using the best dino of the last training.
 
 ## simulation
 
@@ -37,7 +37,8 @@ The simulation mode is better when you want to see the dinos learning through ea
 You can run game mode through the following code:
 
 ```
-python3 main.py game
+sudo python3 main.py game
 ```
 
 In this mode, you can compete against the best dino you have trained. The dino with the highest score wins.
+When running game mode you should give root permissions because the algorithm needs access to your keyboard events.
