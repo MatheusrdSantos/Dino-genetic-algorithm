@@ -34,7 +34,7 @@ class Dino:
         self.mode = mode
         self.game_modes = game_modes
         self.best = False
-        self.color = ['black', 'green', 'blue', 'red'][random.randint(0, 3)]
+        self.color = ['black', 'green', 'blue', 'red', 'yellow', 'orange'][random.randint(0, 5)]
         # load default image
         self.imgs_pil_bent_running = [
             Image.open("./assets/dino-down-"+self.color+".png"),
