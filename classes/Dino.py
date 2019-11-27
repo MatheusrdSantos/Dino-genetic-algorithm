@@ -9,6 +9,7 @@ from classes.DinoBrain import DinoBrain
 import pickle
 #import keyboard
 import numpy as np
+import random
 
 class Dino:
     def __init__(self, master, canvas, brain, game_params, decreaseDinos,jump_height=100, mode="game", game_modes={}):
@@ -33,17 +34,18 @@ class Dino:
         self.mode = mode
         self.game_modes = game_modes
         self.best = False
+        self.color = ['black', 'green', 'blue', 'red'][random.randint(0, 3)]
         # load default image
         self.imgs_pil_bent_running = [
-            Image.open("./assets/dino-down.png"),
-            Image.open("./assets/dino-down-1.png")]
+            Image.open("./assets/dino-down-"+self.color+".png"),
+            Image.open("./assets/dino-down-1-"+self.color+".png")]
         self.img_pil_bent = self.imgs_pil_bent_running[0]
         self.current_pil_bent_running_index = 0 
-        self.img_pil_default = Image.open("./assets/dino.png")
+        self.img_pil_default = Image.open("./assets/dino-"+self.color+".png")
         self.imgs_pil_running = [
-            Image.open("./assets/dino.png"),
-            Image.open("./assets/dino-1.png"),
-            Image.open("./assets/dino-2.png")]
+            Image.open("./assets/dino-"+self.color+".png"),
+            Image.open("./assets/dino-1-"+self.color+".png"),
+            Image.open("./assets/dino-2-"+self.color+".png")]
         self.current_pil_running_index = 0    
         self.image = ImageTk.PhotoImage(self.img_pil_default)
         # display image on canvas
