@@ -12,6 +12,7 @@ from classes.CollisionMonitor import ColisionMonitor
 from classes.ObstacleGenerator import ObstacleGenerator
 from classes.DinoBrain import DinoBrain
 import sys
+import numpy as np
 
 class GameController:
     def __init__(self, mode):
@@ -43,13 +44,23 @@ class GameController:
         self.interfaceObject = {}
         self.score = 0
         self.record = 0
+        try:
+            general_data = np.load('data/general/game.npy')
+            self.general_record = general_data[0]
+        except IOError as err:
+            self.general_record = 0
+            np.save('data/general/game.npy', np.array([0]))
+        
         self.n_generations = 0
         self.game_modes =  {
             "train": "train",
             "game": "game",
             "simulation": "simulation"
-        }
-
+        }  
+    def saveGeneralRecord(self):
+        if(self.general_record<=self.score):
+            print(self.general_record)
+            np.save('data/general/game.npy', np.array([self.general_record]))
     def prepareInterface(self):
         #l1.grid(row = 0, column = 0, sticky = W, pady = 2)
         self.infoPanel.pack(fill='x')
@@ -72,6 +83,10 @@ class GameController:
         n_generation = Label(self.infoPanel, text="Generation: "+str(self.n_generations), bg='#fff')
         n_generation.grid(row=1, column=1, padx=20, pady=10, sticky = W)
         self.interfaceObject['n_generation'] = n_generation
+        
+        general_record = Label(self.infoPanel, text="General record: "+str(self.general_record), bg='#fff')
+        general_record.grid(row=2, column=1, padx=20, pady=10, sticky = W)
+        self.interfaceObject['general_record'] = general_record
     def animateGround(self):
         self.canvas.move(self.ground_id, -9, 0)
         self.canvas.move(self.ground_id_1, -9, 0)
@@ -124,6 +139,7 @@ class GameController:
         self.interfaceObject['score'].config(text="Score: "+str(self.score))
         self.interfaceObject['record'].config(text="Record: "+str(self.record))
         self.interfaceObject['n_generation'].config(text="Generation: "+str(self.n_generations))
+        self.interfaceObject['general_record'].config(text="General record: "+str(self.general_record))
     # create game elements
     def prepareGame(self):
         self.dinos.append(Dino(self.master, self.canvas, DinoBrain(), self.game_params, self.decreaseDinos))
@@ -161,6 +177,10 @@ class GameController:
         self.colisionMonitor.run()
     def stopGround(self):
         print("New gen")
+
+        if(self.general_record<=self.score):
+            self.general_record = self.score
+            np.save('data/general/game.npy', np.array([self.general_record]))
         self.n_generations+=1
         if(self.record<self.score):
             self.record = self.score
@@ -204,6 +224,8 @@ class GameController:
             for dino in self.dinos:
                 if(dino.onScreen):
                     dino.brain.save()
+        if(self.general_record<self.score):
+            self.general_record = self.score
         self.updateLabels()
     def resetGameParams(self):
         self.game_params = {'distance': 100, 'speed': 25, 'height': 0, 'width': 50}
