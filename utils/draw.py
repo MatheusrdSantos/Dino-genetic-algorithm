@@ -73,12 +73,28 @@ def combineAxis(neurons_axis, nn_shape, neuron_size):
                         neurons_axis_y[top_empty_spaces+j]+neuron_size])
     return axis
 
+def drawNeurons(combined_axis, canvas, fill = "#000"):
+    for axis in combined_axis:
+        canvas.create_oval(axis[0], axis[1], axis[2], axis[3], fill="#000")
+def drawConnections(canvas, combined_axis, nn_shape, fill = "#000"):
+    n_layers = len(nn_shape)
+    count = 0
+    for i, layer in enumerate(nn_shape):
+        if(i!=n_layers-1):
+            for j in range(0, layer):
+                for k in range(0, nn_shape[i+1]):
+                    canvas.create_line(combined_axis[count][2],
+                                        combined_axis[count][3], 
+                                        combined_axis[count+layer-j+k][2], 
+                                        combined_axis[count+layer-j+k][3],
+                                        width=3)
+                count+=1
 def draw_nn(width, height, nn_shape, weights, biases, canvas, padding = [10, 10, 10, 10], neuron_size = 30):
     # padding [top right bottom left]
     neurons_axis = calcNeuronsAxis(width, height, nn_shape)
     combined_axis = combineAxis(neurons_axis=neurons_axis, nn_shape=nn_shape, neuron_size=neuron_size)
-    for axis in combined_axis:
-        canvas.create_oval(axis[0], axis[1], axis[2], axis[3], fill="#000")
+    drawNeurons(combined_axis, canvas)
+    drawConnections(canvas, combined_axis, nn_shape)
 draw_nn(width=width, height = height, nn_shape=nn_shape, weights = weights, biases = biases,
 canvas = canvas)
 canvas.pack()
