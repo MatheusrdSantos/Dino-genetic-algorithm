@@ -15,7 +15,7 @@ import sys
 import numpy as np
 
 class GameController:
-    def __init__(self, mode):
+    def __init__(self, mode, dinos_per_gen = 10):
         #can be either a train or a game
         self.mode = mode
         self.master = Tk()
@@ -27,7 +27,7 @@ class GameController:
         self.obstacles = []
         self.colisionMonitor = None
         self.obstacleGenerator = None
-        self.initialDinoNum = 10
+        self.initialDinoNum = dinos_per_gen
         self.game_params = {'distance': 100, 'speed': 25, 'height': 0, 'width': 50}
         self.master.bind('<r>', self.restart)
         self.scoresCheckPoint = [5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 80, 110, 140, 200, 250]
@@ -56,7 +56,7 @@ class GameController:
             "train": "train",
             "game": "game",
             "simulation": "simulation"
-        }  
+        }
     def saveGeneralRecord(self):
         if(self.general_record<=self.score):
             print(self.general_record)

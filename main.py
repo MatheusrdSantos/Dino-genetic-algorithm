@@ -6,6 +6,13 @@ import sys
 from classes.GameController import GameController
 import weakref
 args = sys.argv
-game = GameController(args[1])
-f = weakref.finalize(game, game.saveGeneralRecord)
-game.run()
+
+if(args[1] in ['game', 'simulation', 'train']):
+    dinos_per_gen = 10
+    if(args[1] in ['simulation', 'train']):
+        dinos_per_gen = int(args[2])
+    game = GameController(args[1], dinos_per_gen)
+    f = weakref.finalize(game, game.saveGeneralRecord)
+    game.run()
+else:
+    print('Command not found')
