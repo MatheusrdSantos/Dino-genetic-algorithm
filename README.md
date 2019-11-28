@@ -23,6 +23,11 @@ python3 main.py train
 
 The training mode uses a pre-trained set of dinos. After executing the above command the training will continue using the best dino of the last training.
 
+You can choose the number of dinos per generation as the 3th parameter. The default value is 10.
+```
+python3 main.py train 10
+```
+
 ## simulation
 
 You can run the simulation mode through the following code:
@@ -32,6 +37,10 @@ python3 main.py simulation
 ```
 The simulation mode is better when you want to see the dinos learning through each generation. This mode doesn't use any previous result as a start point. So each stating dino has a random behavior that changes as new generations are generated.
 
+You can choose the number of dinos per generation as the 3th parameter. The default value is 10.
+```
+python3 main.py simulation 10
+```
 ## game
 
 You can run game mode through the following code:
