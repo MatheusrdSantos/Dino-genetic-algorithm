@@ -57,24 +57,23 @@ def calcNeuronsAxis(width, height, nn_shape, padding = [10, 10, 10, 10]):
 def combineAxis(neurons_axis, nn_shape, neuron_size):
     layers_axis = neurons_axis['layers']
     neurons_axis_y = neurons_axis['neurons']
-
+    max_neurons = max(nn_shape)
     axis = []
     for i, layer_size in enumerate(nn_shape):
+        top_empty_spaces = 0
+        empty_spaces = max_neurons - layer_size
+        if(empty_spaces%2==0):
+            top_empty_spaces = int(empty_spaces/2)
+        else:
+            top_empty_spaces = int((empty_spaces-1)/2)
         for j in range(0, layer_size):
             axis.append([layers_axis[i], 
-                        neurons_axis_y[j], 
+                        neurons_axis_y[top_empty_spaces+j], 
                         layers_axis[i]+neuron_size, 
-                        neurons_axis_y[j]+neuron_size])
+                        neurons_axis_y[top_empty_spaces+j]+neuron_size])
     return axis
 
-
-    
-
-    
-    
-
-def draw_nn(width, height, nn_shape, weights, biases, canvas, padding = [10, 10, 10, 10]):
-    neuron_size = 30
+def draw_nn(width, height, nn_shape, weights, biases, canvas, padding = [10, 10, 10, 10], neuron_size = 30):
     # padding [top right bottom left]
     neurons_axis = calcNeuronsAxis(width, height, nn_shape)
     combined_axis = combineAxis(neurons_axis=neurons_axis, nn_shape=nn_shape, neuron_size=neuron_size)
