@@ -16,6 +16,8 @@ weights = [
     ]
 ]
 
+weights_flatten = [2, 3, 0.2, .1, 5, .1, 1, 1, 7, 2.1]
+
 biases = [
     [
         30,
@@ -76,9 +78,10 @@ def combineAxis(neurons_axis, nn_shape, neuron_size):
 def drawNeurons(combined_axis, canvas, fill = "#000"):
     for axis in combined_axis:
         canvas.create_oval(axis[0], axis[1], axis[2], axis[3], fill="#000")
-def drawConnections(canvas, combined_axis, nn_shape, neuron_size, fill = "#000"):
+def drawConnections(canvas, combined_axis, nn_shape, neuron_size, weights_flatten, fill = "#000"):
     n_layers = len(nn_shape)
     count = 0
+    connection_count = 0
     for i, layer in enumerate(nn_shape):
         if(i!=n_layers-1):
             for j in range(0, layer):
@@ -87,15 +90,16 @@ def drawConnections(canvas, combined_axis, nn_shape, neuron_size, fill = "#000")
                                         combined_axis[count][3]-int(neuron_size/2), 
                                         combined_axis[count+layer-j+k][2]-neuron_size, 
                                         combined_axis[count+layer-j+k][3]-int(neuron_size/2),
-                                        width=3)
+                                        width=weights_flatten[connection_count]+1)
+                    connection_count+=1
                 count+=1
-def draw_nn(width, height, nn_shape, weights, biases, canvas, padding = [10, 10, 10, 10], neuron_size = 30):
+def draw_nn(width, height, nn_shape, weights, weights_flatten, biases, canvas, padding = [10, 10, 10, 10], neuron_size = 30):
     # padding [top right bottom left]
-    neurons_axis = calcNeuronsAxis(width, height, nn_shape)
+    neurons_axis = calcNeuronsAxis(width, height, nn_shape, padding)
     combined_axis = combineAxis(neurons_axis=neurons_axis, nn_shape=nn_shape, neuron_size=neuron_size)
     drawNeurons(combined_axis, canvas)
-    drawConnections(canvas, combined_axis, nn_shape, neuron_size)
-draw_nn(width=width, height = height, nn_shape=nn_shape, weights = weights, biases = biases,
-canvas = canvas)
+    drawConnections(canvas, combined_axis, nn_shape, neuron_size, weights_flatten)
+draw_nn(width=width, height = height, nn_shape=nn_shape, weights = weights, weights_flatten = weights_flatten,biases = biases,
+canvas = canvas, padding=[300, 100, 100, 100])
 canvas.pack()
 mainloop()
