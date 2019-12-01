@@ -11,6 +11,7 @@ from classes.FlyingDino import FlyingDino
 from classes.CollisionMonitor import ColisionMonitor
 from classes.ObstacleGenerator import ObstacleGenerator
 from classes.DinoBrain import DinoBrain
+from utils.draw import draw_nn
 import sys
 import numpy as np
 
@@ -19,6 +20,8 @@ class GameController:
         #can be either a train or a game
         self.mode = mode
         self.master = Tk()
+        self.width = 800
+        self.height = 800
         self.canvas = Canvas(self.master, width=800, height=800, bg='#fff')
         self.infoPanel = Frame(self.master, bg='#fff')
         self.colisionMonitor = ColisionMonitor(self.master, self.canvas, self.stopGround)
@@ -57,6 +60,10 @@ class GameController:
             "game": "game",
             "simulation": "simulation"
         }
+        self.nn_elements = {
+            'neurons': [],
+            'connections': []
+        }
     def saveGeneralRecord(self):
         if(self.general_record<=self.score):
             print(self.general_record)
@@ -87,6 +94,12 @@ class GameController:
         general_record = Label(self.infoPanel, text="General record: "+str(self.general_record), bg='#fff')
         general_record.grid(row=2, column=1, padx=20, pady=10, sticky = W)
         self.interfaceObject['general_record'] = general_record
+
+        weights = np.load('data/brain/best_w.npy')
+        weights_flatten = weights.flatten()
+        biases = np.load('data/brain/best_b.npy').flatten()
+        self.nn_elements = draw_nn(width=self.width, height = self.height, nn_shape=[5, 2], weights = weights, weights_flatten = weights_flatten,biases = biases,
+            canvas = self.canvas, padding=[50, 10, 400, 300], neuron_size=10)
     def animateGround(self):
         self.canvas.move(self.ground_id, -9, 0)
         self.canvas.move(self.ground_id_1, -9, 0)

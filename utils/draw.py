@@ -1,12 +1,12 @@
 from tkinter import Canvas, Tk, mainloop, NW, Label, Frame, W
 import numpy as np
 #parameters
-width = 800
-height = 800
+#width = 800
+#height = 800
 
-nn_shape = [5, 2]
+#nn_shape = [5, 2]
 
-weights = [
+""" weights = [
     [
         [2, 3],
         [0.2, .1],
@@ -14,7 +14,7 @@ weights = [
         [1, 1],
         [7, 2.1],
     ]
-]
+] """
 """ w:  [[-0.78596431  0.35074112]
  [ 0.65914959  0.06113607]
  [-0.79714171  3.00564128]
@@ -24,7 +24,7 @@ b:  [[-0.22659369 -1.1304318 ]] """
 
 #weights_flatten = [2, 3, 0.2, .1, 5, .1, 1, 1, 7, 2.1]
 #weights_flatten = [-0.78,  0.35, 0.65, 0.06, -0.79, 3, -1.68,  0.60, 2.16, -0.18]
-weights_flatten = np.load('data/brain/best_w.npy').flatten()
+#weights_flatten = np.load('data/brain/best_w.npy').flatten()
 
 """ biases = [
     [
@@ -38,11 +38,11 @@ weights_flatten = np.load('data/brain/best_w.npy').flatten()
         -1.13
     ]
 ] """
-biases = np.load('data/brain/best_b.npy').flatten()
-print(biases)
+#biases = np.load('data/brain/best_b.npy').flatten()
+#print(biases)
 
-master = Tk()
-canvas = Canvas(master, width=width, height=height, bg='#fff')
+#master = Tk()
+#canvas = Canvas(master, width=width, height=height, bg='#fff')
 
 
 #functions
@@ -92,13 +92,16 @@ def combineAxis(neurons_axis, nn_shape, neuron_size):
     return axis
 
 def drawNeurons(combined_axis, canvas, fill = "#000"):
+    neuron_ids = []
     for axis in combined_axis:
-        canvas.create_oval(axis[0], axis[1], axis[2], axis[3], fill="#000")
+        neuron_ids.append(canvas.create_oval(axis[0], axis[1], axis[2], axis[3], fill="#000"))
+    return neuron_ids
 def drawConnections(canvas, combined_axis, nn_shape, neuron_size, weights_flatten, fill = "#000"):
     n_layers = len(nn_shape)
     count = 0
     connection_count = 0
     weights_normalized = normalize(weights_flatten)
+    connection_ids = []
     print(weights_normalized)
     for i, layer in enumerate(nn_shape):
         if(i!=n_layers-1):
@@ -107,14 +110,17 @@ def drawConnections(canvas, combined_axis, nn_shape, neuron_size, weights_flatte
                     color = "red"
                     if(weights_normalized[connection_count]>0):
                         color = "blue"
-                    canvas.create_line(combined_axis[count][2],
+                    connection_ids.append(
+                        canvas.create_line(combined_axis[count][2],
                                         combined_axis[count][3]-int(neuron_size/2), 
                                         combined_axis[count+layer-j+k][2]-neuron_size, 
                                         combined_axis[count+layer-j+k][3]-int(neuron_size/2),
                                         width=(abs(weights_normalized[connection_count])*2)+1,
                                         fill=color)
+                    )
                     connection_count+=1
                 count+=1
+    return connection_ids
 def removeSignal(values):
     unsigned = []
     for value in values:
@@ -131,9 +137,13 @@ def draw_nn(width, height, nn_shape, weights, weights_flatten, biases, canvas, p
     # padding [top right bottom left]
     neurons_axis = calcNeuronsAxis(width, height, nn_shape, padding)
     combined_axis = combineAxis(neurons_axis=neurons_axis, nn_shape=nn_shape, neuron_size=neuron_size)
-    drawNeurons(combined_axis, canvas)
-    drawConnections(canvas, combined_axis, nn_shape, neuron_size, weights_flatten)
-draw_nn(width=width, height = height, nn_shape=nn_shape, weights = weights, weights_flatten = weights_flatten,biases = biases,
+    neuron_ids  =drawNeurons(combined_axis, canvas)
+    connection_ids = drawConnections(canvas, combined_axis, nn_shape, neuron_size, weights_flatten)
+    return {
+        'neurons': neuron_ids,
+        'connections': connection_ids
+    }
+""" draw_nn(width=width, height = height, nn_shape=nn_shape, weights = weights, weights_flatten = weights_flatten,biases = biases,
 canvas = canvas, padding=[300, 100, 100, 100])
 canvas.pack()
-mainloop()
+mainloop() """
