@@ -11,11 +11,11 @@ class DinoBrain:
         self.jumpAction = jumpAction
         self.bendAction = bendAction
         if(W is None):
-            self.W = np.random.uniform(-1000, 1000, (5,2))
+            self.W = np.random.uniform(-1, 1, (5,2))
         else:
             self.W = W
         if(B is None):
-            self.B = np.random.uniform(-1000, 1000, (1,2))
+            self.B = np.random.uniform(-1, 1, (1,2))
         else:
             self.B = B
         #self.mutate()
@@ -37,8 +37,8 @@ class DinoBrain:
             self.bendAction(None)
     # mutate the brain params with random noise
     def mutate(self):
-        self.W += np.random.uniform(-500, 500, (5,2))
-        self.B += np.random.uniform(-500, 500, (1,2))
+        self.W += np.random.uniform(-1, 1, (5,2))
+        self.B += np.random.uniform(-1, 1, (1,2))
     def getClone(self, mutate=False):
         brain = DinoBrain(self.jumpAction, self.bendAction, W=np.array(self.W), B=np.array(self.B))
         if(mutate):
@@ -57,6 +57,10 @@ class DinoBrain:
         try:
             self.W = np.load('data/brain/best_w.npy')
             self.B = np.load('data/brain/best_b.npy')
+            print("-------")
+            print("w: ", self.W)
+            print("b: ", self.B)
+            print("-------")
         except IOError as err:
             return False
         return True

@@ -31,7 +31,7 @@ class ObstacleGenerator:
             obstacle_distance = abs(int(obstacle_box[0]) - 150)
             #print(obstacle.height)
             self.updateGameParams(distance=obstacle_distance, height=obstacle.height, width=obstacle.width)
-        self.canvas.after(20, self.updateSpawnState)
+        self.canvas.after(5, self.updateSpawnState)
 
     def updateSpawnState(self):
         if(self.obstaclesOnScreen < 3 and self.obstacles[self.lastOnScreenIndex].getBoderRightDistance()>=self.skipDistance):

@@ -1,5 +1,5 @@
 from tkinter import Canvas, Tk, mainloop, NW, Label, Frame, W
-
+import numpy as np
 #parameters
 width = 800
 height = 800
@@ -15,15 +15,31 @@ weights = [
         [7, 2.1],
     ]
 ]
+""" w:  [[-0.78596431  0.35074112]
+ [ 0.65914959  0.06113607]
+ [-0.79714171  3.00564128]
+ [-1.68139739  0.60098684]
+ [ 2.16949441 -0.18447198]]
+b:  [[-0.22659369 -1.1304318 ]] """
 
-weights_flatten = [2, 3, 0.2, .1, 5, .1, 1, 1, 7, 2.1]
+#weights_flatten = [2, 3, 0.2, .1, 5, .1, 1, 1, 7, 2.1]
+#weights_flatten = [-0.78,  0.35, 0.65, 0.06, -0.79, 3, -1.68,  0.60, 2.16, -0.18]
+weights_flatten = np.load('data/brain/best_w.npy').flatten()
 
-biases = [
+""" biases = [
     [
         30,
         -50
     ]
-]
+] """
+""" biases = [
+    [
+        -0.22,
+        -1.13
+    ]
+] """
+biases = np.load('data/brain/best_b.npy').flatten()
+print(biases)
 
 master = Tk()
 canvas = Canvas(master, width=width, height=height, bg='#fff')
@@ -82,17 +98,35 @@ def drawConnections(canvas, combined_axis, nn_shape, neuron_size, weights_flatte
     n_layers = len(nn_shape)
     count = 0
     connection_count = 0
+    weights_normalized = normalize(weights_flatten)
+    print(weights_normalized)
     for i, layer in enumerate(nn_shape):
         if(i!=n_layers-1):
             for j in range(0, layer):
                 for k in range(0, nn_shape[i+1]):
+                    color = "red"
+                    if(weights_normalized[connection_count]>0):
+                        color = "blue"
                     canvas.create_line(combined_axis[count][2],
                                         combined_axis[count][3]-int(neuron_size/2), 
                                         combined_axis[count+layer-j+k][2]-neuron_size, 
                                         combined_axis[count+layer-j+k][3]-int(neuron_size/2),
-                                        width=weights_flatten[connection_count]+1)
+                                        width=(abs(weights_normalized[connection_count])*2)+1,
+                                        fill=color)
                     connection_count+=1
                 count+=1
+def removeSignal(values):
+    unsigned = []
+    for value in values:
+        unsigned.append(abs(value))
+    return unsigned
+def normalize(values):
+    max_val = max(removeSignal(values))
+
+    normalized = []
+    for value in values:
+        normalized.append(round(value/max_val, 2))
+    return normalized
 def draw_nn(width, height, nn_shape, weights, weights_flatten, biases, canvas, padding = [10, 10, 10, 10], neuron_size = 30):
     # padding [top right bottom left]
     neurons_axis = calcNeuronsAxis(width, height, nn_shape, padding)

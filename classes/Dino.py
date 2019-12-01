@@ -102,11 +102,11 @@ class Dino:
         #print(self.game_params)
         return np.array([
                 [
-                    self.game_params['distance'],
-                    self.game_params['width'],
                     self.game_params['height'],
+                    self.getYpos(),
+                    self.game_params['width'],
                     self.game_params['speed'],
-                    self.getYpos()
+                    self.game_params['distance']
                 ]
             ])
     def changeRaiseImage(self):
